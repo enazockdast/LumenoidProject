@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Research Project Summaries</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Georgia', serif;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 30px 40px 60px;
+    background: #fff;
+    color: #222;
+    line-height: 1.75;
+  }
+  h1 {
+    font-size: 1.75em;
+    color: #111;
+    border-bottom: 3px solid #111;
+    padding-bottom: 10px;
+    margin-bottom: 0.4em;
+  }
+  .subtitle { font-size: 0.95em; color: #555; font-style: italic; margin-bottom: 1.5em; }
+  h2 {
+    font-size: 1.3em;
+    margin-top: 2.5em;
+    padding: 8px 14px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  h2.lum  { background: #1565C0; }
+  h2.shp  { background: #6A1B9A; }
+  h2.srt  { background: #BF360C; }
+  h2.xct  { background: #1B5E20; }
+  h3 {
+    font-size: 1.05em;
+    color: #333;
+    margin-top: 1.6em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+  }
+  p { margin: 0.75em 0; }
+  strong { color: #111; }
+  .status {
+    font-size: 0.82em;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 2px 8px;
+    color: #666;
+    font-style: italic;
+    font-family: sans-serif;
+  }
+  .fig {
+    background: #fafafa;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    padding: 20px 16px 12px;
+    margin: 1.8em 0;
+    overflow-x: auto;
+  }
+  .fig svg { display: block; margin: 0 auto; }
+  .fig-cap {
+    font-size: 0.88em;
+    color: #555;
+    text-align: center;
+    font-style: italic;
+    margin-top: 10px;
+    font-family: sans-serif;
+  }
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 2.5em 0; }
+  code { font-family: monospace; font-size: 0.9em; background: #f4f4f4; padding: 1px 4px; border-radius: 3px; }
+  .math { font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>Research Project Summaries</h1>
+<p class="subtitle">Explanatory Modeling Program — hiPSC Lumenoid Morphogenesis</p>
+
+<p><strong>Overarching Goal.</strong> Relate lumenoid growth, cell movement, and multicellular organization to the active and passive forces — adhesion, actomyosin contractility, cell growth, and proliferation — that generate them. Tissue shape, cell dynamics, and sorting are expressed through a unified <em>cell state representation</em> linking molecular perturbations to tissue-scale observables.</p>
+
+<p><strong>Explanatory Modeling Framework.</strong> The program runs in two phases. In the <em>hypothesis-driven phase</em> (now), fast cycles of experiment → segmentation/tracking → hypothesis → forward model identify dominant physical parameters. In the <em>scientific ML phase</em>: <strong>Phase 2a</strong> (parameter inference, near-term) takes known model forms and infers constitutive parameters from data; <strong>Phase 2b</strong> (equation discovery, longer-term, contingent on the label-free pipeline under development) discovers which terms and fields govern dynamics without assuming the model form. Running either stage across the perturbation series triangulates the cell "energy" or state landscape.</p>
+
+<!-- ============================================================ -->
+<!--  FIGURE 1 — PROGRAM ARCHITECTURE                            -->
+<!-- ============================================================ -->
+<div class="fig">
+<svg viewBox="0 0 780 305" width="780" height="305" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Program architecture: three projects, shared cell state representation, perturbation battery, and SciML pipeline</title>
+  <defs>
+    <marker id="arr1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#777"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#2E7D32"/>
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#3949AB"/>
+    </marker>
+  </defs>
+
+  <!-- ── Project boxes ── -->
+  <!-- LumenoidGrowth -->
+  <rect x="12" y="10" width="218" height="78" rx="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="121" y="37" text-anchor="middle" font-size="13" font-weight="bold" fill="#0D47A1">LumenoidGrowth</text>
+  <text x="121" y="55" text-anchor="middle" font-size="10" fill="#444">Growth · Osmotic transport</text>
+  <text x="121" y="70" text-anchor="middle" font-size="10" fill="#444">Shell mechanics · Thickening</text>
+  <text x="121" y="83" text-anchor="middle" font-size="9" fill="#888" font-style="italic">manuscript in preparation</text>
+
+  <!-- Cell Shape Dynamics -->
+  <rect x="281" y="10" width="218" height="78" rx="7" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="2"/>
+  <text x="390" y="33" text-anchor="middle" font-size="13" font-weight="bold" fill="#4A148C">Cell Shape Dynamics</text>
+  <text x="390" y="50" text-anchor="middle" font-size="10" fill="#444">Collective flow · INM · Shape</text>
+  <text x="390" y="65" text-anchor="middle" font-size="10" fill="#444">Active polar fluid · Geometry</text>
+  <text x="390" y="83" text-anchor="middle" font-size="9" fill="#888" font-style="italic">active experiments &amp; modeling</text>
+
+  <!-- CellSorting -->
+  <rect x="550" y="10" width="218" height="78" rx="7" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="659" y="37" text-anchor="middle" font-size="13" font-weight="bold" fill="#8D1F00">CellSorting</text>
+  <text x="659" y="55" text-anchor="middle" font-size="10" fill="#444">Adhesion · Contractility</text>
+  <text x="659" y="70" text-anchor="middle" font-size="10" fill="#444">Sorting patterns · Signaling</text>
+  <text x="659" y="83" text-anchor="middle" font-size="9" fill="#888" font-style="italic">active experiments &amp; modeling</text>
+
+  <!-- Arrows from projects to Cell State -->
+  <line x1="121" y1="88" x2="295" y2="145" stroke="#777" stroke-width="1.5" marker-end="url(#arr1)"/>
+  <line x1="390" y1="88" x2="390" y2="145" stroke="#777" stroke-width="1.5" marker-end="url(#arr1)"/>
+  <line x1="659" y1="88" x2="487" y2="145" stroke="#777" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+  <!-- Cell State Representation -->
+  <rect x="155" y="145" width="470" height="44" rx="7" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="390" y="163" text-anchor="middle" font-size="12" font-weight="bold" fill="#1B5E20">Cell State Representation</text>
+  <text x="390" y="181" text-anchor="middle" font-size="9.5" fill="#444">actin · E/N-cadherin · nuclear position · cell-cycle phase · neighbor identities · polarity</text>
+
+  <!-- Arrow down -->
+  <line x1="390" y1="189" x2="390" y2="210" stroke="#777" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+  <!-- Shared Perturbation Battery -->
+  <rect x="18" y="210" width="744" height="42" rx="6" fill="#F9F9F9" stroke="#999" stroke-width="1.5"/>
+  <text x="390" y="226" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Shared Perturbation Battery</text>
+  <text x="390" y="244" text-anchor="middle" font-size="9.5" fill="#555">rapamycin · glycolysis inh. · Dhiraj synthetic circuits · ZO-1 knockdown · ROCK1 / MYH9 / MYH10 · E-cad / N-cad · 2D pre-patterning</text>
+
+  <!-- Arrow down -->
+  <line x1="390" y1="252" x2="390" y2="267" stroke="#3949AB" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+  <!-- SciML strip: Phase 2a + 2b -->
+  <rect x="18" y="267" width="744" height="33" rx="6" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <!-- Phase 2a -->
+  <rect x="28" y="272" width="340" height="23" rx="4" fill="#C5CAE9" stroke="none"/>
+  <text x="198" y="287" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2a  —  Parameter Inference (near-term)</text>
+  <!-- Arrow -->
+  <text x="378" y="288" text-anchor="middle" font-size="15" fill="#3949AB">→</text>
+  <!-- Phase 2b -->
+  <rect x="392" y="272" width="360" height="23" rx="4" fill="#9FA8DA" stroke="none"/>
+  <text x="572" y="287" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2b  —  Equation Discovery (label-free pipeline)</text>
+</svg>
+<p class="fig-cap"><strong>Figure 1.</strong> Program architecture. Three projects share a common cell state representation, perturbation battery, and scientific ML pipeline.</p>
+</div>
+
+<hr/>
+
+<!-- ============================================================ -->
+<!--  LUMENOID GROWTH                                            -->
+<!-- ============================================================ -->
+<h2 class="lum">LumenoidGrowth</h2>
+<p><span class="status">manuscript in preparation</span></p>
+
+<h3>Measure</h3>
+<p>Time-lapse imaging tracks inner radius, outer radius, and epithelial thickness over days. The central observation — the epithelium <em>thickens</em> while the lumen grows, opposite to pressure-driven thinning in most organoids — is quantified across control, rapamycin, and TJP1/ZO-1 CRISPRi knockdown. The next layer adds mosaic TJP1 lumenoids, DOX washout experiments (to resolve competing timescales), and actomyosin perturbations. <strong>Actin and E-cadherin / N-cadherin intensity fields</strong> connect cytoskeletal organization and adhesion to shell mechanics. Growth rate is controlled through three independent routes: <strong>rapamycin</strong> (mTOR), <strong>glycolysis inhibitors</strong> (2-DG; distinct metabolic node), and <strong>Dhiraj's synthetic growth control circuits</strong> (direct cell-cycle control). All three should produce matched thickness reductions when calibrated by rate; deviations reveal pathway-specific effects.</p>
+
+<h3>Model</h3>
+<p>The <strong>manuscript</strong> is built on a minimal continuum model coupling (1) cell volume growth, (2) osmotic transport, and (3) elastic shell mechanics. Key insight: when growth outpaces osmotic and elastic relaxation, area compression converts to thickness increase via cell incompressibility. The lumenoid operates in a <em>strong osmotic flow</em> regime. Post-publication, the continuum model extends to <strong>Voronoi/vertex models</strong> resolving individual cells — implementing the full adhesion matrix, junctional tensions, growth rules, and cell-state labels — the natural target for Phase 2a SciML.</p>
+
+<!-- ============================================================ -->
+<!--  FIGURE 2 — LUMENOID GROWTH MECHANISM                      -->
+<!-- ============================================================ -->
+<div class="fig">
+<svg viewBox="0 0 780 260" width="780" height="260" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>LumenoidGrowth mechanism: growth-compression-thickening and perturbation routes</title>
+  <defs>
+    <marker id="a-red" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#C62828"/>
+    </marker>
+    <marker id="a-blue" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#1565C0"/>
+    </marker>
+    <marker id="a-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="a-grn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#2E7D32"/>
+    </marker>
+    <!-- Clip for epithelium annulus -->
+    <clipPath id="epi-clip">
+      <rect x="0" y="0" width="210" height="260"/>
+    </clipPath>
+  </defs>
+
+  <!-- ── Panel A: Lumenoid cross-section ── -->
+  <text x="105" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Cross-section</text>
+
+  <!-- Basement membrane -->
+  <circle cx="105" cy="140" r="84" fill="none" stroke="#795548" stroke-width="2" stroke-dasharray="6,4"/>
+  <!-- Epithelial shell -->
+  <circle cx="105" cy="140" r="84" fill="#90CAF9" stroke="none"/>
+  <circle cx="105" cy="140" r="48" fill="#E3F2FD" stroke="none"/>
+  <!-- Lumen -->
+  <circle cx="105" cy="140" r="48" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/>
+
+  <!-- Labels -->
+  <text x="105" y="138" text-anchor="middle" font-size="10" fill="#0D47A1">Lumen</text>
+  <text x="105" y="152" text-anchor="middle" font-size="9" fill="#0D47A1" font-style="italic">osmotic</text>
+  <text x="160" y="120" text-anchor="middle" font-size="9" fill="#1A237E" font-weight="bold">Epithelium</text>
+  <text x="176" y="175" text-anchor="middle" font-size="8" fill="#5D4037" font-style="italic">BM</text>
+
+  <!-- Growth arrows (outward, red) -->
+  <line x1="105" y1="56" x2="105" y2="35" stroke="#C62828" stroke-width="2" marker-end="url(#a-red)"/>
+  <line x1="105" y1="224" x2="105" y2="245" stroke="#C62828" stroke-width="2" marker-end="url(#a-red)"/>
+  <line x1="21" y1="140" x2="2" y2="140" stroke="#C62828" stroke-width="2" marker-end="url(#a-red)"/>
+  <line x1="189" y1="140" x2="208" y2="140" stroke="#C62828" stroke-width="2" marker-end="url(#a-red)"/>
+  <text x="105" y="28" text-anchor="middle" font-size="9" fill="#C62828" font-weight="bold">growth</text>
+
+  <!-- Osmotic arrows (inward, blue) -->
+  <line x1="80" y1="97" x2="88" y2="105" stroke="#1565C0" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <line x1="130" y1="97" x2="122" y2="105" stroke="#1565C0" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <line x1="80" y1="183" x2="88" y2="175" stroke="#1565C0" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <line x1="130" y1="183" x2="122" y2="175" stroke="#1565C0" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <text x="56" y="143" text-anchor="middle" font-size="8" fill="#1565C0" transform="rotate(-90,56,143)">osmotic</text>
+
+  <!-- ── Panel B: Competition / outcome ── -->
+  <line x1="215" y1="20" x2="215" y2="250" stroke="#ddd" stroke-width="1"/>
+  <text x="390" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Competition &amp; Outcome</text>
+
+  <!-- Balance scale concept -->
+  <text x="280" y="55" text-anchor="middle" font-size="10" fill="#C62828" font-weight="bold">Cell Growth</text>
+  <text x="280" y="70" text-anchor="middle" font-size="9" fill="#C62828">adds volume</text>
+  <line x1="280" y1="75" x2="390" y2="100" stroke="#C62828" stroke-width="2" marker-end="url(#a-red)"/>
+
+  <text x="500" y="55" text-anchor="middle" font-size="10" fill="#1565C0" font-weight="bold">Osmotic + Elastic</text>
+  <text x="500" y="70" text-anchor="middle" font-size="9" fill="#1565C0">relaxation</text>
+  <line x1="500" y1="75" x2="390" y2="100" stroke="#1565C0" stroke-width="2" marker-end="url(#a-blue)"/>
+
+  <!-- When growth > relaxation box -->
+  <rect x="310" y="105" width="160" height="38" rx="5" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+  <text x="390" y="121" text-anchor="middle" font-size="10" font-weight="bold" fill="#F57F17">growth &gt; relaxation</text>
+  <text x="390" y="136" text-anchor="middle" font-size="9" fill="#795548">→ area compression</text>
+
+  <!-- Incompressibility -->
+  <line x1="390" y1="143" x2="390" y2="163" stroke="#555" stroke-width="1.5" marker-end="url(#a-gray)"/>
+  <rect x="310" y="163" width="160" height="28" rx="5" fill="#FFECB3" stroke="#FF8F00" stroke-width="1.5"/>
+  <text x="390" y="178" text-anchor="middle" font-size="9.5" fill="#E65100">cell incompressibility</text>
+  <text x="390" y="191" text-anchor="middle" font-size="9" fill="#795548">area ↓  →  thickness ↑</text>
+
+  <!-- Outcome arrow -->
+  <line x1="390" y1="195" x2="390" y2="215" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#a-grn)"/>
+  <rect x="310" y="215" width="160" height="28" rx="5" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="390" y="232" text-anchor="middle" font-size="10" font-weight="bold" fill="#1B5E20">THICKENING ✓</text>
+
+  <!-- ── Panel C: Perturbation routes ── -->
+  <line x1="560" y1="20" x2="560" y2="250" stroke="#ddd" stroke-width="1"/>
+  <text x="670" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Growth-Rate Knobs</text>
+
+  <!-- Three routes -->
+  <!-- Rapamycin -->
+  <rect x="575" y="32" width="180" height="30" rx="5" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="665" y="47" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Rapamycin</text>
+  <text x="665" y="58" text-anchor="middle" font-size="8.5" fill="#555">mTOR inhibition</text>
+
+  <!-- Glycolysis -->
+  <rect x="575" y="78" width="180" height="30" rx="5" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="665" y="93" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Glycolysis inhibitors</text>
+  <text x="665" y="104" text-anchor="middle" font-size="8.5" fill="#555">metabolic — 2-DG</text>
+
+  <!-- Dhiraj -->
+  <rect x="575" y="124" width="180" height="30" rx="5" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="665" y="139" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Dhiraj synthetic circuits</text>
+  <text x="665" y="150" text-anchor="middle" font-size="8.5" fill="#555">direct cell-cycle control</text>
+
+  <!-- Bracket and label -->
+  <line x1="573" y1="32" x2="566" y2="32" stroke="#555" stroke-width="1.2"/>
+  <line x1="566" y1="32" x2="566" y2="154" stroke="#555" stroke-width="1.2"/>
+  <line x1="566" y1="154" x2="573" y2="154" stroke="#555" stroke-width="1.2"/>
+  <line x1="566" y1="93" x2="556" y2="93" stroke="#555" stroke-width="1.2" marker-end="url(#a-gray)"/>
+  <text x="552" y="90" text-anchor="end" font-size="9" fill="#C62828" font-weight="bold">↓ growth</text>
+  <text x="552" y="100" text-anchor="end" font-size="9" fill="#2E7D32" font-weight="bold">→ ↓ thickness</text>
+
+  <!-- ZO-1 -->
+  <rect x="575" y="175" width="180" height="30" rx="5" fill="#FCE4EC" stroke="#C62828" stroke-width="1.5"/>
+  <text x="665" y="190" text-anchor="middle" font-size="10" font-weight="bold" fill="#880E4F">ZO-1 knockdown</text>
+  <text x="665" y="201" text-anchor="middle" font-size="8.5" fill="#555">↑ permeability → lumen ↓</text>
+
+  <!-- Mosaic -->
+  <rect x="575" y="221" width="180" height="28" rx="5" fill="#FCE4EC" stroke="#C62828" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="665" y="237" text-anchor="middle" font-size="10" font-weight="bold" fill="#880E4F">Mosaic TJP1</text>
+  <text x="665" y="248" text-anchor="middle" font-size="8.5" fill="#555">local permeability heterogeneity</text>
+</svg>
+<p class="fig-cap"><strong>Figure 2.</strong> LumenoidGrowth mechanism. Left: lumenoid cross-section with growth (red outward arrows) and osmotic transport (blue inward arrows). Center: competition between growth and relaxation produces area compression, which cell incompressibility converts to thickening. Right: three independent growth-rate knobs and osmotic perturbations.</p>
+</div>
+
+<h3>Predict</h3>
+<p>(1) Faster growth → thicker shell; slower growth → thinner (validated). (2) Increasing permeability strongly shrinks lumen — strong-flow regime (validated). (3) All three growth-rate perturbations should produce matched thickness reductions when calibrated by rate; isoform-specific deviations reveal pathway contributions beyond growth rate. (4) DOX washout reveals the timescale hierarchy: osmotic relaxation fast → lumen radius responds before thickness. (5) Actomyosin perturbations change effective stiffness independently of growth rate.</p>
+<h3>Build / Validate</h3>
+<p>Continuum model maps morphology across the growth rate × permeability parameter space. Post-publication vertex extension maps spatial heterogeneity effects. Validated: control dynamics, rapamycin, ZO-1. Open: single-cell volume measurements (incompressibility test), mosaic and actomyosin datasets, vertex model (post-publication).</p>
+
+<hr/>
+
+<!-- ============================================================ -->
+<!--  CELL SHAPE DYNAMICS                                        -->
+<!-- ============================================================ -->
+<h2 class="shp">Cell Shape Dynamics</h2>
+<p><span class="status">active experiments and model development</span></p>
+
+<h3>Measure</h3>
+<p><strong>Collective motion:</strong> 2D planar colonies show coherent CCW rotation (label-free brightfield tracking). On the 3D lumenoid surface (lattice light-sheet), nuclear velocity fields form vortices and spirals with point-source cores. <strong>Cell and nuclear shape:</strong> flat/cuboidal in 2D → columnar/pseudostratified in 3D lumenoid. The <em>apical-basal nuclear motion</em> track resolves z-displacement as a function of cell-cycle phase from existing LLS data. <strong>Molecular fields:</strong> actin intensity (polarity proxy), E-cadherin and N-cadherin intensity (adhesion landscape, alternative force descriptors). <strong>Perturbations:</strong> rapamycin / glycolysis inhibitors / Dhiraj circuits (growth rate); ZO-1 and mosaic ZO-1; ROCK1 / MYH9 / MYH10; E-cad / N-cad induction. <strong>48-hour LLS runs</strong> (>1 cell division) will resolve nuclear volume, cell count, streamlines vs. size <em>R</em>, and INM-streamline correlation. <strong>2D pre-patterning geometries</strong> (stripes, concentric disks) impose defined boundary conditions. Prior experiments show stripes seed hollow cylinders with two spherical caps and rings seed toroidal lumenoids.</p>
+
+<!-- ============================================================ -->
+<!--  FIGURE 3 — 2D→3D TRANSITION + GEOMETRY EFFECTS           -->
+<!-- ============================================================ -->
+<div class="fig">
+<svg viewBox="0 0 780 300" width="780" height="300" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Cell Shape Dynamics: 2D CCW rotation transitioning to 3D vortices/spirals, pre-patterning geometry effects, and apical-basal nuclear motion</title>
+  <defs>
+    <marker id="b-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="b-purple" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#6A1B9A"/>
+    </marker>
+    <marker id="b-red" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#B71C1C"/>
+    </marker>
+  </defs>
+
+  <!-- ── Left: 2D colony CCW rotation ── -->
+  <text x="90" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">2D Colony</text>
+  <!-- Colony boundary -->
+  <circle cx="90" cy="130" r="72" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="2"/>
+  <!-- Nuclei dots -->
+  <circle cx="90" cy="72" r="5" fill="#9575CD"/><circle cx="130" cy="88" r="4.5" fill="#9575CD"/>
+  <circle cx="148" cy="128" r="5" fill="#9575CD"/><circle cx="130" cy="168" r="4.5" fill="#9575CD"/>
+  <circle cx="90" cy="185" r="5" fill="#9575CD"/><circle cx="50" cy="168" r="4.5" fill="#9575CD"/>
+  <circle cx="32" cy="128" r="5" fill="#9575CD"/><circle cx="50" cy="88" r="4.5" fill="#9575CD"/>
+  <circle cx="90" cy="130" r="4" fill="#9575CD"/>
+  <circle cx="108" cy="112" r="4" fill="#9575CD"/><circle cx="72" cy="112" r="4" fill="#9575CD"/>
+  <circle cx="72" cy="148" r="4" fill="#9575CD"/><circle cx="108" cy="148" r="4" fill="#9575CD"/>
+
+  <!-- CCW rotation arrows (curved, at periphery) -->
+  <path d="M 148,104 A 55,55 0 0 0 155,152" fill="none" stroke="#B71C1C" stroke-width="2.5" marker-end="url(#b-red)"/>
+  <path d="M 90,58 A 55,55 0 0 0 40,104" fill="none" stroke="#B71C1C" stroke-width="2.5" marker-end="url(#b-red)"/>
+  <text x="90" y="240" text-anchor="middle" font-size="9.5" fill="#B71C1C" font-weight="bold">CCW rotation</text>
+  <text x="90" y="255" text-anchor="middle" font-size="9" fill="#555">chiral active stress</text>
+
+  <!-- ── Transition arrow ── -->
+  <text x="200" y="122" text-anchor="middle" font-size="10" fill="#555" font-style="italic">2D→3D</text>
+  <text x="200" y="137" text-anchor="middle" font-size="10" fill="#555" font-style="italic">closure</text>
+  <line x1="168" y1="130" x2="232" y2="130" stroke="#555" stroke-width="2" marker-end="url(#b-gray)"/>
+  <!-- Poincaré-Hopf note -->
+  <text x="200" y="158" text-anchor="middle" font-size="8" fill="#777">Poincaré–Hopf</text>
+  <text x="200" y="169" text-anchor="middle" font-size="8" fill="#777">→ +1 defects</text>
+
+  <!-- ── Middle: 3D sphere with vortices/spirals ── -->
+  <text x="340" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">3D Lumenoid Surface</text>
+  <!-- Sphere (outer ellipse) -->
+  <ellipse cx="340" cy="130" rx="78" ry="78" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+  <!-- Latitude lines -->
+  <ellipse cx="340" cy="130" rx="78" ry="20" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.5"/>
+  <ellipse cx="340" cy="105" rx="65" ry="16" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.4"/>
+  <ellipse cx="340" cy="155" rx="65" ry="16" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.4"/>
+  <!-- Longitude arc -->
+  <path d="M340,52 Q400,130 340,208" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.5"/>
+  <path d="M340,52 Q280,130 340,208" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Defect 1 (top) — vortex -->
+  <circle cx="340" cy="72" r="8" fill="#FF8A80" stroke="#B71C1C" stroke-width="1.5"/>
+  <text x="340" y="77" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="bold">+1</text>
+  <!-- Vortex arrows around defect 1 -->
+  <path d="M 322,66 A 14,14 0 1 1 322,79" fill="none" stroke="#B71C1C" stroke-width="1.8" marker-end="url(#b-red)"/>
+
+  <!-- Defect 2 (bottom) — spiral -->
+  <circle cx="340" cy="188" r="8" fill="#FF8A80" stroke="#B71C1C" stroke-width="1.5"/>
+  <text x="340" y="193" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="bold">+1</text>
+  <!-- Spiral arrows around defect 2 -->
+  <path d="M 322,184 A 14,14 0 1 1 322,197" fill="none" stroke="#B71C1C" stroke-width="1.8" marker-end="url(#b-red)"/>
+  <!-- INM source indicator -->
+  <line x1="340" y1="180" x2="340" y2="172" stroke="#1565C0" stroke-width="1.5" marker-end="url(#b-purple)"/>
+  <text x="356" y="172" font-size="8" fill="#1565C0">INM</text>
+  <text x="356" y="182" font-size="8" fill="#1565C0">source</text>
+
+  <!-- Flow lines on sphere surface -->
+  <path d="M295,100 Q315,115 300,135 Q285,155 295,175" fill="none" stroke="#6A1B9A" stroke-width="1.5" opacity="0.7"/>
+  <path d="M385,100 Q365,115 380,135 Q395,155 385,175" fill="none" stroke="#6A1B9A" stroke-width="1.5" opacity="0.7"/>
+
+  <text x="340" y="240" text-anchor="middle" font-size="9.5" fill="#B71C1C" font-weight="bold">vortices + spirals</text>
+  <text x="340" y="255" text-anchor="middle" font-size="9" fill="#555">active polar fluid on S²</text>
+
+  <!-- ── Right: Geometry effects ── -->
+  <line x1="428" y1="20" x2="428" y2="280" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="610" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Pre-patterning → 3D Topology</text>
+
+  <!-- Row 1: Disk → Sphere -->
+  <text x="500" y="38" text-anchor="middle" font-size="9" fill="#666">2D colony</text>
+  <text x="700" y="38" text-anchor="middle" font-size="9" fill="#666">3D morphology</text>
+
+  <!-- Disk -->
+  <circle cx="490" cy="72" r="28" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="490" y="76" text-anchor="middle" font-size="9" fill="#4A148C">disk</text>
+  <line x1="522" y1="72" x2="558" y2="72" stroke="#555" stroke-width="1.5" marker-end="url(#b-gray)"/>
+  <!-- Sphere -->
+  <ellipse cx="590" cy="72" rx="28" ry="28" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <ellipse cx="590" cy="72" rx="28" ry="7" fill="none" stroke="#CE93D8" stroke-width="0.8"/>
+  <text x="590" y="76" text-anchor="middle" font-size="9" fill="#4A148C">sphere</text>
+  <text x="640" y="70" text-anchor="start" font-size="9" fill="#333">2 defects</text>
+
+  <!-- Row 2: Stripe → Capped Cylinder -->
+  <rect x="462" y="120" width="56" height="26" rx="3" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="490" y="137" text-anchor="middle" font-size="9" fill="#4A148C">stripe</text>
+  <line x1="522" y1="133" x2="558" y2="133" stroke="#555" stroke-width="1.5" marker-end="url(#b-gray)"/>
+  <!-- Capped cylinder: cylindrical body + two domed hemispherical caps -->
+  <!-- Body fill -->
+  <rect x="562" y="120" width="56" height="28" fill="#F3E5F5" stroke="none"/>
+  <!-- Top dome (upper arc = spherical cap) -->
+  <path d="M 562,120 A 28,12 0 0 1 618,120" fill="#E0D0EF" stroke="#7B1FA2" stroke-width="1.5"/>
+  <!-- Bottom dome (lower arc = spherical cap) -->
+  <path d="M 618,148 A 28,12 0 0 1 562,148" fill="#E0D0EF" stroke="#7B1FA2" stroke-width="1.5"/>
+  <!-- Side edges -->
+  <line x1="562" y1="120" x2="562" y2="148" stroke="#7B1FA2" stroke-width="1.5"/>
+  <line x1="618" y1="120" x2="618" y2="148" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="590" y="137" text-anchor="middle" font-size="8.5" fill="#4A148C">capped cyl.</text>
+  <text x="640" y="131" text-anchor="start" font-size="9" fill="#333">2 defects</text>
+  <text x="640" y="143" text-anchor="start" font-size="8" fill="#555">(sphere topology)</text>
+
+  <!-- Row 3: Ring → Torus -->
+  <!-- Ring (annulus) -->
+  <circle cx="490" cy="218" r="28" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <circle cx="490" cy="218" r="12" fill="#fff" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="490" y="222" text-anchor="middle" font-size="9" fill="#4A148C">ring</text>
+  <line x1="522" y1="218" x2="558" y2="218" stroke="#555" stroke-width="1.5" marker-end="url(#b-gray)"/>
+  <!-- Torus (simplified as overlapping ellipses) -->
+  <ellipse cx="590" cy="218" rx="30" ry="14" fill="none" stroke="#7B1FA2" stroke-width="1.5"/>
+  <ellipse cx="590" cy="218" rx="30" ry="14" fill="#F3E5F5"/>
+  <ellipse cx="590" cy="218" rx="12" ry="6" fill="#fff" stroke="#7B1FA2" stroke-width="1.5"/>
+  <ellipse cx="590" cy="210" rx="24" ry="8" fill="none" stroke="#CE93D8" stroke-width="1"/>
+  <text x="590" y="222" text-anchor="middle" font-size="9" fill="#4A148C">torus</text>
+  <text x="640" y="215" text-anchor="start" font-size="9" fill="#333">0 defects</text>
+  <text x="640" y="227" text-anchor="start" font-size="8" fill="#555">(genus-1)</text>
+
+  <!-- Label column -->
+  <text x="450" y="195" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">Prior</text>
+  <text x="450" y="206" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">expts.</text>
+  <!-- bracket -->
+  <line x1="460" y1="115" x2="455" y2="115" stroke="#4A148C" stroke-width="1"/>
+  <line x1="455" y1="115" x2="455" y2="240" stroke="#4A148C" stroke-width="1"/>
+  <line x1="455" y1="240" x2="460" y2="240" stroke="#4A148C" stroke-width="1"/>
+</svg>
+<p class="fig-cap"><strong>Figure 3.</strong> Cell Shape Dynamics. Left: 2D colony CCW rotation driven by chiral active stress. Center: upon 3D closure the Poincaré–Hopf theorem forces +1 topological defects; vortices form from in-plane flow; spirals require out-of-plane INM as a source. Right: pre-patterning geometry controls 3D topology — disk seeds a sphere (2 defects), stripe seeds a hollow cylinder with two spherical caps (2 defects, sphere topology), ring seeds a torus (genus-1, 0 defects).</p>
+</div>
+
+<h3>Model</h3>
+<p><strong>Active polar fluid</strong> (current default): chiral active polar/nematic gel on S² with traction/self-propulsion force <em class="math">f = γv₀p</em> (monopolar; motivated by traction-force microscopy). Solved pseudospectrally (IMEX). Flat-geometry limit used first for rapid exploration. <strong>Voronoi/vertex model</strong> (cell-resolved): extends LumenoidGrowth framework with polarity dynamics, active traction, explicit cell shape outputs — suited for mosaic experiments and cell-cycle-gated events. <strong>Shape Dynamics</strong> (Langevin subproject): each cell/nucleus is represented by spherical harmonic or PCA shape coefficients <em class="math">q = (q₁,...,qₙ)</em> and modeled as:</p>
+<p style="text-align:center; font-style:italic; background:#f8f0ff; padding:6px 12px; border-radius:4px; display:inline-block; margin: 0.5em auto;">dqᵢ/dt = −∂E(q, neighbor states)/∂qᵢ + η(t)</p>
+<p>Fitting this to tracked shape trajectories infers <em>E</em>(q) and noise statistics directly from data — the cell shape analog of the SciML energy landscape framework. <strong>Phase 2a SciML</strong>: given <em class="math">v</em>(x,t), actin <em class="math">I_a</em>(x,t), cadherin <em class="math">I_c</em>(x,t), learn <em class="math">I_a → p</em> and infer ζ, κ, K, γv₀ via sparse regression or PINNs. <strong>Phase 2b SciML</strong>: discover which fields are minimal sufficient descriptors (contingent on label-free data scale-up).</p>
+
+<!-- ============================================================ -->
+<!--  FIGURE 4 — SHAPE DYNAMICS LANGEVIN + MODEL HIERARCHY      -->
+<!-- ============================================================ -->
+<div class="fig">
+<svg viewBox="0 0 780 240" width="780" height="240" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Shape Dynamics Langevin subproject and model resolution ladder</title>
+  <defs>
+    <marker id="c-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="c-purple" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#6A1B9A"/>
+    </marker>
+  </defs>
+
+  <!-- ── Left: cell with shape modes ── -->
+  <text x="110" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Shape Modes</text>
+
+  <!-- Base cell shape (slightly irregular ellipse approximated) -->
+  <ellipse cx="110" cy="120" rx="55" ry="38" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="2"/>
+  <!-- Mode indicators -->
+  <text x="110" y="115" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">q₁ elongation</text>
+  <text x="110" y="128" text-anchor="middle" font-size="9" fill="#4A148C">q₂ bending</text>
+  <text x="110" y="141" text-anchor="middle" font-size="9" fill="#7B1FA2">q₃… higher</text>
+  <!-- Nucleus inside -->
+  <ellipse cx="110" cy="120" rx="18" ry="13" fill="#CE93D8" stroke="#4A148C" stroke-width="1.5"/>
+  <text x="110" y="124" text-anchor="middle" font-size="8" fill="#fff">nucleus</text>
+  <!-- Mode arrows -->
+  <line x1="163" y1="110" x2="178" y2="104" stroke="#B71C1C" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <line x1="163" y1="130" x2="178" y2="136" stroke="#B71C1C" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <text x="148" y="90" text-anchor="middle" font-size="9" fill="#B71C1C">SH or PCA</text>
+  <text x="148" y="101" text-anchor="middle" font-size="9" fill="#B71C1C">decomposition</text>
+
+  <!-- Neighbor coupling arrows -->
+  <ellipse cx="57" cy="158" rx="32" ry="22" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="57" y="162" text-anchor="middle" font-size="8" fill="#1A237E">neighbor</text>
+  <line x1="77" y1="148" x2="93" y2="138" stroke="#3949AB" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#c-gray)"/>
+
+  <ellipse cx="163" cy="158" rx="32" ry="22" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="163" y="162" text-anchor="middle" font-size="8" fill="#1A237E">neighbor</text>
+  <line x1="143" y1="148" x2="127" y2="138" stroke="#3949AB" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#c-gray)"/>
+
+  <text x="110" y="207" text-anchor="middle" font-size="9.5" fill="#4A148C" font-weight="bold">Shape Dynamics</text>
+  <text x="110" y="220" text-anchor="middle" font-size="9" fill="#555">dqᵢ/dt = −∂E/∂qᵢ + η</text>
+  <text x="110" y="233" text-anchor="middle" font-size="8.5" fill="#777">E depends on cell + neighbors</text>
+
+  <!-- ── Middle: energy landscape for shape ── -->
+  <line x1="215" y1="20" x2="215" y2="235" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="380" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Shape Energy Landscape</text>
+
+  <!-- Axes -->
+  <line x1="240" y1="195" x2="540" y2="195" stroke="#555" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <line x1="240" y1="195" x2="240" y2="35" stroke="#555" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <text x="390" y="215" text-anchor="middle" font-size="10" fill="#555">shape mode space  q</text>
+  <text x="220" y="115" text-anchor="middle" font-size="10" fill="#555" transform="rotate(-90,220,115)">E(q)</text>
+
+  <!-- Energy curve with wells for different shape states -->
+  <!-- Smooth curve: flat → columnar → pseudostratified -->
+  <path d="M255,80 Q275,155 305,100 Q330,55 360,95 Q385,130 410,80 Q435,40 460,85 Q490,130 520,85"
+        fill="none" stroke="#7B1FA2" stroke-width="2.5"/>
+
+  <!-- Well 1: flat -->
+  <circle cx="305" cy="100" r="5" fill="#7B1FA2"/>
+  <text x="305" y="130" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">flat</text>
+  <text x="305" y="142" text-anchor="middle" font-size="8" fill="#666">2D colony</text>
+
+  <!-- Well 2: columnar -->
+  <circle cx="410" cy="80" r="5" fill="#7B1FA2"/>
+  <text x="410" y="60" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">columnar</text>
+  <text x="410" y="72" text-anchor="middle" font-size="8" fill="#666">transition</text>
+
+  <!-- Well 3: pseudostratified -->
+  <circle cx="490" cy="130" r="5" fill="#7B1FA2"/>
+  <text x="505" y="130" text-anchor="start" font-size="9" fill="#4A148C" font-weight="bold">pseudo-</text>
+  <text x="505" y="141" text-anchor="start" font-size="9" fill="#4A148C" font-weight="bold">stratified</text>
+  <text x="505" y="153" text-anchor="start" font-size="8" fill="#666">3D lumenoid</text>
+
+  <!-- Noise fluctuation -->
+  <path d="M305,100 Q312,88 320,94 Q328,100 336,93" fill="none" stroke="#B71C1C" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <text x="321" y="83" text-anchor="middle" font-size="8" fill="#B71C1C">η(t)</text>
+
+  <!-- Perturbation arrow (shifts landscape) -->
+  <line x1="360" y1="55" x2="385" y2="55" stroke="#1565C0" stroke-width="1.5" marker-end="url(#c-gray)" stroke-dasharray="4,3"/>
+  <text x="372" y="46" text-anchor="middle" font-size="8" fill="#1565C0">rapamycin</text>
+
+  <!-- ── Right: Model resolution ladder ── -->
+  <line x1="548" y1="20" x2="548" y2="235" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="665" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Model Ladder</text>
+
+  <!-- Four model levels stacked vertically -->
+  <rect x="560" y="28" width="200" height="32" rx="5" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="1.5"/>
+  <text x="660" y="43" text-anchor="middle" font-size="10" font-weight="bold" fill="#4A148C">Active Polar Fluid</text>
+  <text x="660" y="56" text-anchor="middle" font-size="8.5" fill="#555">continuum flow topology</text>
+
+  <rect x="560" y="73" width="200" height="32" rx="5" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="660" y="88" text-anchor="middle" font-size="10" font-weight="bold" fill="#4A148C">Voronoi / Vertex</text>
+  <text x="660" y="101" text-anchor="middle" font-size="8.5" fill="#555">cell-resolved, perturbations</text>
+
+  <rect x="560" y="118" width="200" height="32" rx="5" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="660" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2a — Inference</text>
+  <text x="660" y="146" text-anchor="middle" font-size="8.5" fill="#555">ζ, κ, K, γv₀ from data</text>
+
+  <rect x="560" y="163" width="200" height="32" rx="5" fill="#E8EAF6" stroke="#3949AB" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="660" y="178" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2b — Discovery</text>
+  <text x="660" y="191" text-anchor="middle" font-size="8.5" fill="#888">which fields govern dynamics?</text>
+  <text x="660" y="203" text-anchor="middle" font-size="8" fill="#888" font-style="italic">(label-free pipeline)</text>
+
+  <!-- Arrows between model levels -->
+  <line x1="660" y1="60" x2="660" y2="73" stroke="#6A1B9A" stroke-width="1.2" marker-end="url(#c-purple)"/>
+  <line x1="660" y1="105" x2="660" y2="118" stroke="#6A1B9A" stroke-width="1.2" marker-end="url(#c-purple)"/>
+  <line x1="660" y1="150" x2="660" y2="163" stroke="#3949AB" stroke-width="1.2" marker-end="url(#c-gray)"/>
+  <text x="695" y="68" font-size="8" fill="#777">more</text>
+  <text x="695" y="78" font-size="8" fill="#777">resolved</text>
+</svg>
+<p class="fig-cap"><strong>Figure 4.</strong> Shape Dynamics subproject and model resolution ladder. Left: each cell/nucleus is decomposed into shape modes (q₁, q₂, …) via spherical harmonics or PCA; neighbor coupling terms in the effective energy E link adjacent cell shapes. Center: the energy landscape over shape mode space has wells corresponding to flat, columnar, and pseudostratified states; perturbations shift the landscape and noise η(t) drives fluctuations. Right: four model levels from continuum active polar fluid to equation discovery (Phase 2b).</p>
+</div>
+
+<h3>Predict</h3>
+<p>(1) ω(r) in 2D colony rescales with colony size/screening length; chirality reversal reverses rotation sense and 3D spiral handedness. (2) Surface divergence ∇·v localized at spiral cores; blocking INM converts spirals to vortices. (3) Streamline topology changes with lumenoid size R near-parameter-freely. (4) Rapamycin/glycolysis inhibitors/Dhiraj circuits reduce flow magnitude and spiral intensity; independent test via distinct mechanisms. (5) Actin intensity correlates with polarity field throughout tissue (monopolar traction) not just near defects (dipolar stress). (6) Stripe-seeded cylinders and ring-seeded toroidal lumenoids show qualitatively different defect topologies predicted by geometry alone. (7) Low-order shape modes have longer relaxation times; neighbor shape correlations are detectable. (8) Phase 2a inferred (ζ, κ, γv₀) across perturbations co-vary low-dimensionally if a single cell state variable underlies them.</p>
+<h3>Validate</h3>
+<p>Solver validated (9/9 tests); point-source Green's function to &lt;10⁻³. Sequence: (i) ω(r) profile vs. active-nematic prediction; (ii) surface divergence at spiral cores; (iii) size-R scaling; (iv) INM-streamline correlation from 48-hr runs; (v) actin and cadherin field correlations with velocity; (vi) geometry experiments; (vii) Phase 2a inferred parameters on theoretical phase diagram; (viii) Langevin E(q) predictions of relaxation times on held-out data.</p>
+
+<hr/>
+
+<!-- ============================================================ -->
+<!--  CELL SORTING                                               -->
+<!-- ============================================================ -->
+<h2 class="srt">CellSorting</h2>
+<p><span class="status">active experiments and model development</span></p>
+
+<h3>Measure</h3>
+<p>Two hiPSC populations are mixed in a lumenoid; one carries DOX-inducible N-cadherin. The measurement battery: membrane-localized N-cadherin intensity, <strong>E-cadherin intensity</strong> (endogenous baseline), heterotypic contact fraction, domain interface length, neighbor-exchange rate, cell MSD, pattern autocorrelation, and <strong>actin intensity</strong> (contractility readout). Immediate priority: <strong>DOX washout kinetics</strong> (fit dN/dt = k_on f(C_DOX) − k_off N) to resolve the protein-turnover vs. tissue-rearrangement timescale competition. Second layer: <strong>pattern reversibility</strong> at partial, mature, and full sorting. Third layer: <strong>actomyosin perturbations</strong> (ROCK1, MYH9, MYH10 via iCRISPRi; blebbistatin, Y-27632) to test whether differential contractility independently generates or reshapes sorted domains.</p>
+
+<!-- ============================================================ -->
+<!--  FIGURE 5 — CELLSORTING FEEDBACK + ENERGY LANDSCAPE        -->
+<!-- ============================================================ -->
+<div class="fig">
+<svg viewBox="0 0 780 270" width="780" height="270" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>CellSorting: feedback loop from cell state through mechanics to rearrangement and signaling, and energy landscape with pattern basins</title>
+  <defs>
+    <marker id="d-orange" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#BF360C"/>
+    </marker>
+    <marker id="d-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="d-blue" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#1565C0"/>
+    </marker>
+  </defs>
+
+  <!-- ── Left: Feedback loop ── -->
+  <text x="175" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#8D1F00">Sorting Feedback Loop</text>
+
+  <!-- Central cycle — 5 nodes in a pentagon arrangement -->
+  <!-- Node positions (cx, cy):
+       Cell State: 175, 80
+       Mechanics:  265, 140
+       Rearrangement: 230, 220
+       Neighbors: 120, 220
+       Signaling:  85, 140  -->
+
+  <!-- Nodes -->
+  <rect x="118" y="60" width="115" height="36" rx="18" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="175" y="82" text-anchor="middle" font-size="10" font-weight="bold" fill="#8D1F00">Cell State</text>
+
+  <rect x="228" y="118" width="110" height="36" rx="18" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="283" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#8D1F00">Adhesion /</text>
+  <text x="283" y="148" text-anchor="middle" font-size="10" font-weight="bold" fill="#8D1F00">Contractility</text>
+
+  <rect x="183" y="210" width="120" height="36" rx="18" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="243" y="232" text-anchor="middle" font-size="10" font-weight="bold" fill="#8D1F00">Rearrangement</text>
+
+  <rect x="57" y="210" width="110" height="36" rx="18" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="112" y="232" text-anchor="middle" font-size="10" font-weight="bold" fill="#8D1F00">New Neighbors</text>
+
+  <rect x="20" y="118" width="110" height="36" rx="18" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="75" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#8D1F00">Signaling /</text>
+  <text x="75" y="148" text-anchor="middle" font-size="10" font-weight="bold" fill="#8D1F00">Fate</text>
+
+  <!-- Connecting arrows (curved, around the loop) -->
+  <path d="M233,78 Q268,95 263,120" fill="none" stroke="#BF360C" stroke-width="2" marker-end="url(#d-orange)"/>
+  <path d="M310,155 Q315,190 300,213" fill="none" stroke="#BF360C" stroke-width="2" marker-end="url(#d-orange)"/>
+  <path d="M183,230 Q158,245 145,245 Q130,245 112,246" fill="none" stroke="#BF360C" stroke-width="2" marker-end="url(#d-orange)"/>
+  <path d="M70,210 Q58,190 57,157" fill="none" stroke="#BF360C" stroke-width="2" marker-end="url(#d-orange)"/>
+  <path d="M110,118 Q128,95 118,80" fill="none" stroke="#BF360C" stroke-width="2" marker-end="url(#d-orange)"/>
+
+  <!-- DOX perturbation arrow into Cell State -->
+  <line x1="175" y1="25" x2="175" y2="58" stroke="#1565C0" stroke-width="2" marker-end="url(#d-blue)" stroke-dasharray="5,3"/>
+  <text x="193" y="35" font-size="9" fill="#1565C0" font-weight="bold">DOX on/off</text>
+  <text x="193" y="46" font-size="8" fill="#1565C0">N-cad ↑ / ↓</text>
+
+  <!-- Actomyosin perturbation into Mechanics -->
+  <line x1="350" y1="130" x2="340" y2="138" stroke="#1565C0" stroke-width="2" marker-end="url(#d-blue)" stroke-dasharray="5,3"/>
+  <text x="355" y="122" font-size="9" fill="#1565C0" font-weight="bold">ROCK1/MYH9</text>
+  <text x="355" y="133" font-size="8" fill="#1565C0">contractility ↓</text>
+
+  <!-- ── Right: Energy landscape ── -->
+  <line x1="390" y1="15" x2="390" y2="265" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="585" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#8D1F00">Sorting Energy Landscape</text>
+
+  <!-- Axes -->
+  <line x1="410" y1="220" x2="770" y2="220" stroke="#555" stroke-width="1.5" marker-end="url(#d-gray)"/>
+  <line x1="410" y1="220" x2="410" y2="30" stroke="#555" stroke-width="1.5" marker-end="url(#d-gray)"/>
+  <text x="590" y="240" text-anchor="middle" font-size="10" fill="#555">cell configuration space</text>
+  <text x="392" y="125" text-anchor="middle" font-size="10" fill="#555" transform="rotate(-90,392,125)">E(config)</text>
+
+  <!-- Energy curve with three basins -->
+  <path d="M420,80 Q445,175 475,120 Q500,70 530,115 Q555,155 580,105 Q605,60 635,110 Q660,155 690,100 Q715,55 750,80"
+        fill="none" stroke="#BF360C" stroke-width="2.5"/>
+
+  <!-- Basin 1: mixed (metastable) -->
+  <circle cx="475" cy="120" r="5" fill="#BF360C"/>
+  <text x="475" y="148" text-anchor="middle" font-size="9" fill="#8D1F00" font-weight="bold">mixed</text>
+  <text x="475" y="160" text-anchor="middle" font-size="8" fill="#666">(initial)</text>
+
+  <!-- Basin 2: sorted (stable) -->
+  <circle cx="580" cy="105" r="5" fill="#BF360C"/>
+  <text x="580" y="80" text-anchor="middle" font-size="9" fill="#8D1F00" font-weight="bold">sorted</text>
+  <text x="580" y="91" text-anchor="middle" font-size="8" fill="#666">domains</text>
+
+  <!-- Basin 3: salt-and-pepper -->
+  <circle cx="690" cy="100" r="5" fill="#BF360C"/>
+  <text x="710" y="95" text-anchor="start" font-size="9" fill="#8D1F00" font-weight="bold">salt-&amp;</text>
+  <text x="710" y="107" text-anchor="start" font-size="9" fill="#8D1F00" font-weight="bold">pepper</text>
+  <text x="710" y="119" text-anchor="start" font-size="8" fill="#666">(signaling)</text>
+
+  <!-- DOX washout: moves from sorted back toward mixed -->
+  <path d="M580,100 Q545,75 510,90 Q490,98 480,118" fill="none" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-blue)"/>
+  <text x="526" y="72" text-anchor="middle" font-size="8.5" fill="#1565C0">DOX washout</text>
+  <text x="526" y="82" text-anchor="middle" font-size="8" fill="#1565C0">(if fluid)</text>
+
+  <!-- Jammed regime: arrow stays in basin -->
+  <path d="M577,105 Q585,122 578,128 Q570,133 575,120" fill="none" stroke="#E65100" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#d-orange)"/>
+  <text x="598" y="148" text-anchor="middle" font-size="8" fill="#E65100">jammed:</text>
+  <text x="598" y="158" text-anchor="middle" font-size="8" fill="#E65100">persists</text>
+
+  <!-- Phase 2a label -->
+  <rect x="412" y="185" width="350" height="22" rx="4" fill="#E8EAF6" stroke="#3949AB" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="587" y="200" text-anchor="middle" font-size="9" fill="#1A237E">Phase 2a: infer E(N-cad, E-cad, actin) from mosaic lumenoid videos</text>
+</svg>
+<p class="fig-cap"><strong>Figure 5.</strong> CellSorting. Left: feedback loop — cell state (N-cadherin, actin) drives adhesion/contractility, which drives rearrangement, which changes neighbor identities, which updates signaling and cell state. DOX induction/washout perturbs the loop at the cell state node; actomyosin knockdowns perturb at the mechanics node. Right: effective energy landscape over cell configuration space with basins for mixed, sorted, and salt-and-pepper states. DOX washout either remixes (fluid tissue) or remains trapped (jammed). Phase 2a SciML infers E from molecular intensity fields.</p>
+</div>
+
+<h3>Model</h3>
+<p>Dynamical self-organization: cell state → adhesion/contractility/motility → rearrangement → new neighbors → signaling/state. Immediate model: <strong>Voronoi/vertex simulation</strong> with time-dependent adhesion (from DOX kinetics), independent edge tension Λ_ij(t), proliferation. Parameter sweeps map regimes: rapid remixing, slow dissolution, interface roughening, kinetic trapping. Phase 2a SciML infers E(cell state) — how adhesion and tension depend on N-cadherin, E-cadherin, and actin fields. Longer-term: <strong>neighbor-dependent signaling</strong> closes the mechanics-signaling feedback loop.</p>
+
+<h3>Predict / Build / Validate</h3>
+<p>(1) Fluid lumenoids remix after washout; jammed lumenoids retain domains — domain persistence correlates with neighbor-exchange rate, not instantaneous sorting index. (2) MYH9 and MYH10 knockdowns produce distinct interface phenotypes. (3) Phase 2a inferred landscape: N-cadherin and actomyosin perturbations are orthogonal axes if adhesion and contractility are separable descriptors. Current capability: DOX-inducible N-cadherin sorting demonstrated; agent-based models fast enough for sweeps. Open: (i) DOX response model fit; (ii) reversibility at partial vs. mature sorting; (iii) actomyosin perturbation feasibility; (iv) Phase 2a validation — inferred J_ij(t) should recover measured cadherin levels.</p>
+
+<hr/>
+
+<!-- ============================================================ -->
+<!--  CROSS-CUTTING + FIGURE 6 SCML PIPELINE                    -->
+<!-- ============================================================ -->
+<h2 class="xct">Cross-Cutting Themes</h2>
+
+<h3>Cell State Representation</h3>
+<p>All three projects measure overlapping quantities on the same cells: nuclear trajectories, actin intensity, E/N-cadherin levels, cortical tension proxies, cell-cycle phase, and neighbor identities. A unified per-cell state vector encodes these as functions of position and time. A perturbation maps onto a trajectory in this space; tissue-scale outcomes are readouts of that trajectory. The cell state representation is both the SciML input and the common language making the three projects a single program.</p>
+
+<h3>Shared Perturbation Logic</h3>
+<p>Growth rate: rapamycin (mTOR), glycolysis inhibitors (metabolic), Dhiraj's synthetic circuits (cell-cycle direct). If a phenotype is growth-rate-driven, all three should produce it when matched by rate; deviations implicate pathway-specific effects. Combined with ZO-1 knockdown (including mosaic), actomyosin perturbations (ROCK1, MYH9, MYH10, pharmacological), and E-cad / N-cad induction/washout, this is the full battery deployed across all three projects simultaneously. In the SciML framework, each condition is a sampling point; designing new perturbations means choosing sampling points to maximally discriminate between competing model structures.</p>
+
+<h3>Geometry as a Control Variable</h3>
+<p>2D pre-patterning (stripes, concentric disks, squares) changes boundary conditions and global symmetry rather than molecular composition. Prior experiments confirm: stripes seed cylindrical lumenoids; rings seed toroidal lumenoids. This controls 3D topological outcome orthogonally to molecular perturbations. In the active polar fluid model, different geometries impose different defect structures; in the Langevin Shape Dynamics framework, different geometries impose different effective boundary potentials on shape modes.</p>
+
+<!-- ============================================================ -->
+<!--  FIGURE 6 — SCIML PIPELINE                                 -->
+<!-- ============================================================ -->
+<div class="fig">
+<svg viewBox="0 0 780 230" width="780" height="230" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Scientific ML pipeline: Phase 1 hypothesis-driven, Phase 2a parameter inference, Phase 2b equation discovery</title>
+  <defs>
+    <marker id="e-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#444"/>
+    </marker>
+    <marker id="e-blue" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#3949AB"/>
+    </marker>
+  </defs>
+
+  <!-- Phase labels -->
+  <text x="160" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">Phase 1  —  Hypothesis-Driven  (now)</text>
+  <text x="510" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1A237E">Phase 2  —  Scientific ML</text>
+
+  <!-- Phase 1 background -->
+  <rect x="8" y="25" width="350" height="195" rx="8" fill="#F9F9F9" stroke="#999" stroke-width="1.5"/>
+
+  <!-- Phase 2a background -->
+  <rect x="388" y="25" width="182" height="195" rx="8" fill="#EEF0FB" stroke="#3949AB" stroke-width="1.5"/>
+  <!-- Phase 2b background -->
+  <rect x="582" y="25" width="190" height="195" rx="8" fill="#E8EAF6" stroke="#3949AB" stroke-width="2" stroke-dasharray="6,3"/>
+
+  <!-- Phase 2a/2b sub-labels -->
+  <text x="479" y="43" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2a</text>
+  <text x="479" y="55" text-anchor="middle" font-size="9" fill="#1A237E">Parameter Inference</text>
+  <text x="479" y="66" text-anchor="middle" font-size="8.5" fill="#555">(near-term)</text>
+
+  <text x="677" y="43" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2b</text>
+  <text x="677" y="55" text-anchor="middle" font-size="9" fill="#1A237E">Equation Discovery</text>
+  <text x="677" y="66" text-anchor="middle" font-size="8.5" fill="#888" font-style="italic">label-free pipeline →</text>
+
+  <!-- Phase 1 boxes (horizontal flow) -->
+  <!-- Experiment -->
+  <rect x="20" y="80" width="68" height="50" rx="5" fill="#fff" stroke="#888" stroke-width="1.5"/>
+  <text x="54" y="102" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#333">Experi-</text>
+  <text x="54" y="115" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#333">ment</text>
+  <line x1="88" y1="105" x2="100" y2="105" stroke="#444" stroke-width="1.5" marker-end="url(#e-gray)"/>
+
+  <!-- Segment / Track -->
+  <rect x="100" y="80" width="68" height="50" rx="5" fill="#fff" stroke="#888" stroke-width="1.5"/>
+  <text x="134" y="99" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Segment</text>
+  <text x="134" y="111" text-anchor="middle" font-size="9" fill="#333">&amp; Track</text>
+  <text x="134" y="123" text-anchor="middle" font-size="8" fill="#666">nuclear, actin</text>
+  <line x1="168" y1="105" x2="180" y2="105" stroke="#444" stroke-width="1.5" marker-end="url(#e-gray)"/>
+
+  <!-- Hypothesis -->
+  <rect x="180" y="80" width="68" height="50" rx="5" fill="#fff" stroke="#888" stroke-width="1.5"/>
+  <text x="214" y="102" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#333">Hypo-</text>
+  <text x="214" y="115" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#333">thesis</text>
+  <line x1="248" y1="105" x2="260" y2="105" stroke="#444" stroke-width="1.5" marker-end="url(#e-gray)"/>
+
+  <!-- Forward model -->
+  <rect x="260" y="80" width="85" height="50" rx="5" fill="#fff" stroke="#888" stroke-width="1.5"/>
+  <text x="302" y="99" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#333">Forward</text>
+  <text x="302" y="112" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#333">Model</text>
+  <text x="302" y="124" text-anchor="middle" font-size="8" fill="#666">continuum/vertex</text>
+
+  <!-- Phase 1 cycle arrow (feedback) -->
+  <path d="M302,130 Q302,185 175,195 Q60,205 54,130" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#e-gray)"/>
+  <text x="175" y="210" text-anchor="middle" font-size="8.5" fill="#666">fast cycles → identifies key parameters</text>
+
+  <!-- Arrow into Phase 2a -->
+  <line x1="347" y1="105" x2="387" y2="105" stroke="#3949AB" stroke-width="2.5" marker-end="url(#e-blue)"/>
+  <text x="367" y="96" text-anchor="middle" font-size="8" fill="#3949AB">data</text>
+  <text x="367" y="107" text-anchor="middle" font-size="8" fill="#3949AB">at scale</text>
+
+  <!-- Phase 2a content -->
+  <text x="479" y="95" text-anchor="middle" font-size="9" fill="#333">Known model form</text>
+  <!-- Input fields -->
+  <rect x="403" y="103" width="150" height="22" rx="3" fill="#C5CAE9" stroke="#3949AB" stroke-width="1"/>
+  <text x="478" y="118" text-anchor="middle" font-size="8.5" fill="#1A237E">v(x,t), actin, cadherin fields</text>
+  <line x1="478" y1="125" x2="478" y2="137" stroke="#3949AB" stroke-width="1.5" marker-end="url(#e-blue)"/>
+  <!-- Output params -->
+  <rect x="403" y="137" width="150" height="28" rx="3" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="478" y="150" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A237E">ζ, κ, K, γv₀</text>
+  <text x="478" y="163" text-anchor="middle" font-size="8" fill="#555">E(q), J_ij, Λ_ij</text>
+  <!-- Phase diagram note -->
+  <line x1="478" y1="165" x2="478" y2="177" stroke="#3949AB" stroke-width="1.5" marker-end="url(#e-blue)"/>
+  <rect x="400" y="177" width="158" height="28" rx="3" fill="#9FA8DA" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="479" y="190" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A237E">Parameter landscape</text>
+  <text x="479" y="203" text-anchor="middle" font-size="8" fill="#fff">across perturbation series</text>
+
+  <!-- Arrow into Phase 2b -->
+  <line x1="571" y1="155" x2="581" y2="155" stroke="#3949AB" stroke-width="2" marker-end="url(#e-blue)"/>
+  <text x="576" y="146" text-anchor="middle" font-size="7.5" fill="#3949AB">large</text>
+  <text x="576" y="156" text-anchor="middle" font-size="7.5" fill="#3949AB">dataset</text>
+
+  <!-- Phase 2b content -->
+  <text x="677" y="95" text-anchor="middle" font-size="9" fill="#555">No assumed model form</text>
+  <rect x="597" y="103" width="160" height="22" rx="3" fill="#9FA8DA" stroke="#3949AB" stroke-width="1"/>
+  <text x="677" y="118" text-anchor="middle" font-size="8.5" fill="#1A237E">microscopy video library</text>
+  <line x1="677" y1="125" x2="677" y2="137" stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#e-blue)"/>
+  <rect x="597" y="137" width="160" height="22" rx="3" fill="#7986CB" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="677" y="152" text-anchor="middle" font-size="8.5" fill="#fff">SINDy / PINN discovery</text>
+  <line x1="677" y1="159" x2="677" y2="171" stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#e-blue)"/>
+  <rect x="597" y="171" width="160" height="38" rx="3" fill="#5C6BC0" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="677" y="185" text-anchor="middle" font-size="9" font-weight="bold" fill="#fff">Governing equations</text>
+  <text x="677" y="198" text-anchor="middle" font-size="8" fill="#E8EAF6">which fields are sufficient?</text>
+  <text x="677" y="209" text-anchor="middle" font-size="8" fill="#E8EAF6">actin? cadherin? mitosis?</text>
+</svg>
+<p class="fig-cap"><strong>Figure 6.</strong> Scientific ML pipeline. Phase 1 (left): fast hypothesis-driven cycles identify key physical parameters using minimal forward models. Phase 2a (center): given measured molecular fields and dynamics, infer constitutive parameters of known model forms (active polar fluid, vertex model, Langevin shape equation) — near-term, applicable at modest data scale. Phase 2b (right): with large-scale label-free data, discover governing equations without assuming model form using SINDy or PINNs.</p>
+</div>
+
+<h3>Modeling Resolution Ladder</h3>
+<p>Continuum shell model (LumenoidGrowth manuscript) → Active polar fluid (Cell Shape Dynamics flow topology) → Voronoi/vertex model (cell-resolved, perturbations, all three projects) → Phase 2a SciML (parameter inference from data) → Phase 2b SciML (equation discovery at scale). These are complementary, not competing. Coarser models generate predictions that motivate vertex implementations; vertex models produce synthetic datasets that validate SciML methods before applying them to real data.</p>
+
+<hr/>
+
+<!-- ============================================================ -->
+<!--  SYNTHETIC MODULES                                          -->
+<!-- ============================================================ -->
+<h2 style="background:#37474F;" class="xct">Synthetic Modules</h2>
+
+<p>A major arm of the program is the design and deployment of synthetic genetic circuits that provide precise, tunable, and reversible control over cellular processes that are otherwise inaccessible to pharmacological perturbation. Four functional classes are being developed, each contributing to the three projects through perturbation amplitude, spatial (mosaic) control, and timing control.</p>
+
+<!-- ============================================================ -->
+<!--  FIGURE 7 — SYNTHETIC MODULES MAP                          -->
+<!-- ============================================================ -->
+<div class="fig">
+<svg viewBox="0 0 780 340" width="780" height="340" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Synthetic modules: four circuit classes and their connections to the three projects, with mosaic and timing control highlighted</title>
+  <defs>
+    <marker id="f-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="f-dark" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#37474F"/>
+    </marker>
+  </defs>
+
+  <!-- ── Column headers ── -->
+  <text x="160" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#37474F">Module Class</text>
+  <text x="430" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#37474F">Key Capability</text>
+  <text x="670" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#37474F">Project Connection</text>
+  <line x1="10" y1="22" x2="770" y2="22" stroke="#bbb" stroke-width="1"/>
+
+  <!-- ═══ ROW 1: Fate Control ═══ -->
+  <!-- Module box -->
+  <rect x="10" y="30" width="295" height="60" rx="6" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="30" y="52" font-size="12" font-weight="bold" fill="#1B5E20">① Fate Control</text>
+  <text x="30" y="68" font-size="9.5" fill="#333">Drive cell identity, polarization state,</text>
+  <text x="30" y="81" font-size="9.5" fill="#333">or differentiation on demand</text>
+
+  <!-- Capability -->
+  <rect x="318" y="30" width="225" height="60" rx="6" fill="#F1F8E9" stroke="#558B2F" stroke-width="1.2"/>
+  <text x="330" y="50" font-size="9.5" fill="#333">• Set mosaic cell-type composition</text>
+  <text x="330" y="63" font-size="9.5" fill="#333">• Bias apical vs. basal polarity</text>
+  <text x="330" y="76" font-size="9.5" fill="#333">• Gate 2D→3D transition timing</text>
+
+  <!-- Project tags -->
+  <rect x="556" y="35" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="50" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+  <rect x="556" y="63" width="110" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="611" y="78" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting</text>
+  <rect x="672" y="35" width="100" height="22" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="722" y="50" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0D47A1">LumenoidGrowth</text>
+
+  <!-- ═══ ROW 2: Cell-Cell Communication ═══ -->
+  <rect x="10" y="100" width="295" height="60" rx="6" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="30" y="122" font-size="12" font-weight="bold" fill="#0D47A1">② Cell-Cell Communication</text>
+  <text x="30" y="138" font-size="9.5" fill="#333">Synthetic lateral inhibition, sender /</text>
+  <text x="30" y="151" font-size="9.5" fill="#333">receiver, juxtacrine feedback</text>
+
+  <rect x="318" y="100" width="225" height="60" rx="6" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.2"/>
+  <text x="330" y="120" font-size="9.5" fill="#333">• Close signaling-mechanics loop</text>
+  <text x="330" y="133" font-size="9.5" fill="#333">• Sender fraction = tunable knob</text>
+  <text x="330" y="146" font-size="9.5" fill="#333">• Salt-and-pepper pattern access</text>
+
+  <rect x="556" y="105" width="110" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="611" y="120" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting ★</text>
+  <rect x="556" y="133" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="148" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+
+  <!-- ═══ ROW 3: Adhesion / Contractility ═══ -->
+  <rect x="10" y="170" width="295" height="60" rx="6" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="30" y="192" font-size="12" font-weight="bold" fill="#8D1F00">③ Adhesion / Contractility</text>
+  <text x="30" y="208" font-size="9.5" fill="#333">Inducible E-cad, N-cad, ROCK1,</text>
+  <text x="30" y="221" font-size="9.5" fill="#333">MYH9/10 — orthogonal inducers</text>
+
+  <rect x="318" y="170" width="225" height="60" rx="6" fill="#FFF3E0" stroke="#E65100" stroke-width="1.2"/>
+  <text x="330" y="190" font-size="9.5" fill="#333">• True independent adhesion vs.</text>
+  <text x="330" y="203" font-size="9.5" fill="#333">  contractility titration</text>
+  <text x="330" y="216" font-size="9.5" fill="#333">• Mosaic mechanical heterogeneity</text>
+
+  <rect x="556" y="175" width="110" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="611" y="190" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting ★</text>
+  <rect x="556" y="203" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="218" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+  <rect x="672" y="175" width="100" height="22" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="722" y="190" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0D47A1">LumenoidGrowth</text>
+
+  <!-- ═══ ROW 4: Mechano-Biological ═══ -->
+  <rect x="10" y="240" width="295" height="60" rx="6" fill="#FFF8E1" stroke="#F57F17" stroke-width="2"/>
+  <text x="30" y="262" font-size="12" font-weight="bold" fill="#E65100">④ Mechano-Biological Circuits</text>
+  <text x="30" y="278" font-size="9.5" fill="#333">Output regulated by tension, pressure,</text>
+  <text x="30" y="291" font-size="9.5" fill="#333">curvature, or substrate stiffness</text>
+
+  <rect x="318" y="240" width="225" height="60" rx="6" fill="#FFFDE7" stroke="#F9A825" stroke-width="1.2"/>
+  <text x="330" y="260" font-size="9.5" fill="#333">• Tissue self-reports mechanical state</text>
+  <text x="330" y="273" font-size="9.5" fill="#333">• Test mechano-biological feedback</text>
+  <text x="330" y="286" font-size="9.5" fill="#333">• Stabilize / destabilize morphogenesis</text>
+
+  <rect x="556" y="245" width="100" height="22" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="606" y="260" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0D47A1">LumenoidGrowth</text>
+  <rect x="556" y="273" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="288" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+  <rect x="672" y="245" width="100" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="722" y="260" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting</text>
+
+  <!-- ═══ Bottom strip: Mosaic + Timing ═══ -->
+  <rect x="10" y="310" width="760" height="26" rx="5" fill="#ECEFF1" stroke="#607D8B" stroke-width="1.5"/>
+  <text x="160" y="327" text-anchor="middle" font-size="10" font-weight="bold" fill="#37474F">Mosaic expression</text>
+  <text x="160" y="327" font-size="0" fill="none"/>
+  <!-- mosaic icon: two cell colors -->
+  <rect x="20" y="315" width="10" height="10" rx="2" fill="#A5D6A7"/>
+  <rect x="32" y="315" width="10" height="10" rx="2" fill="#EF9A9A"/>
+  <rect x="44" y="315" width="10" height="10" rx="2" fill="#A5D6A7"/>
+  <rect x="56" y="315" width="10" height="10" rx="2" fill="#EF9A9A"/>
+  <rect x="68" y="315" width="10" height="10" rx="2" fill="#EF9A9A"/>
+  <text x="84" y="327" font-size="9.5" fill="#37474F">Expressing fraction = direct knob on local-to-global coupling in all models</text>
+  <text x="405" y="327" font-size="10" font-weight="bold" fill="#37474F"> | </text>
+  <!-- timing icon -->
+  <text x="415" y="327" font-size="9.5" fill="#37474F">⏱ </text>
+  <text x="428" y="327" font-size="10" font-weight="bold" fill="#37474F">Timing control: </text>
+  <text x="515" y="327" font-size="9.5" fill="#37474F">DOX on/off maps non-equilibrium trajectories in the cell state landscape</text>
+
+  <!-- ★ legend -->
+  <text x="680" y="308" font-size="8.5" fill="#8D1F00">★ = most developed</text>
+</svg>
+<p class="fig-cap"><strong>Figure 7.</strong> Synthetic module classes and their project connections. Four circuit types — fate control, cell-cell communication, adhesion/contractility, and mechano-biological — each contribute to one or more projects. Starred entries indicate the most experimentally developed connections. The bottom strip highlights the two unique capabilities shared by all synthetic modules: mosaic expression (tunable expressing fraction as a spatial heterogeneity knob) and timing control (DOX on/off generates non-equilibrium trajectories in the cell state landscape).</p>
+</div>
+
+<h3>Module Classes</h3>
+<p><strong>① Fate control</strong> drives cells toward specific identities, polarization states, or differentiation programs on demand. In lumenoid morphogenesis, fate modules set the starting composition of mosaic lumenoids, bias which cells become apically or basally polarized, and test whether specific fate transitions are required for the 2D→3D step.</p>
+
+<p><strong>② Cell-cell communication</strong> implements synthetic intercellular signaling — lateral inhibition (synthetic Delta-Notch), juxtacrine feedback, or diffusible sender/receiver pairs. These modules close the signaling-mechanics feedback loop that is modeled in CellSorting but not yet experimentally implemented. The fraction of cells carrying the sender vs. receiver construct is a direct tunable parameter, making the expressing fraction a knob on circuit behavior and pattern outcome.</p>
+
+<p><strong>③ Adhesion and contractility</strong> modules give inducible, reversible, and dose-controlled access to E-cadherin, N-cadherin (already deployed in CellSorting), and actomyosin regulators (ROCK1, MYH9, MYH10). Using orthogonal inducible promoters (e.g., DOX and abscisic acid) in the same cell enables true independent titration of the adhesion and contractility axes of the sorting phase diagram — impossible with pharmacological agents alone.</p>
+
+<p><strong>④ Mechano-biological circuits</strong> are the most forward-looking class: circuits whose gene expression or protein activity is regulated by mechanical signals — membrane tension, cytoskeletal strain, hydrostatic pressure, curvature. These turn the tissue into a self-reporting system, revealing when and where mechanical thresholds are crossed, and introducing mechano-biological feedback that can stabilize or destabilize morphogenetic trajectories.</p>
+
+<h3>Connection to Projects</h3>
+<p><strong>LumenoidGrowth.</strong> Dhiraj's growth control circuits are the third independent growth-rate knob. Key additions: (i) <em>mosaic growth circuit</em> — expressing the growth-inhibiting construct in a defined fraction of cells creates a spatially heterogeneous growth field, testing whether local growth suppression propagates into global shell mechanics or remains localized; (ii) <em>mechano-sensing growth feedback</em> — a circuit that reduces growth rate in response to compressive stress tests whether the tissue regulates its own thickening through mechanical feedback; (iii) <em>synthetic permeability circuit</em> — inducible claudin or channel expression, a cleaner and more reversible alternative to CRISPRi ZO-1 knockdown.</p>
+
+<p><strong>Cell Shape Dynamics.</strong> A synthetic polarity circuit biasing a defined fraction of cells toward a specific actin orientation directly tests how the polarity field <strong>p</strong> is established and how a locally injected polarity bias propagates through an active polar fluid. Mechano-sensing circuits responsive to shear stress or membrane curvature reveal whether cells detect the flows they generate — mechano-biological feedback as a stabilizer or amplifier of vortices and spirals. Timing is decisive: applying a polarity perturbation before vs. after the 2D→3D transition tests whether the transition is gated by the polarity state. Mosaic actomyosin circuits create spatial heterogeneity in the active stress field, testing how local mechanical defects reorganize global topological defect patterns — a much cleaner version of a pharmacological mosaic.</p>
+
+<p><strong>CellSorting.</strong> Beyond the current DOX-inducible N-cadherin, the roadmap has three extensions. First, synthetic lateral inhibition closes the signaling-mechanics feedback loop, enabling the salt-and-pepper pattern class predicted computationally but not yet accessible. Second, orthogonal inducible control of adhesion and contractility in the same cell allows true independent navigation of the sorting phase diagram. Third, a mechano-sensing contractility circuit — one that upregulates actomyosin in response to increased heterotypic contact force — creates a mechanically self-reinforcing sorting boundary, testing whether domain interfaces are actively stabilized by feedback.</p>
+
+<h3>Mosaic Expression and Timing as Scientific Tools</h3>
+<p><strong>Mosaic expression</strong> is the most distinctive capability synthetic modules provide. A mosaic lumenoid is not merely a perturbed lumenoid — it is a tissue with built-in spatial heterogeneity that directly probes local-to-global coupling: whether the continuum assumption holds (LumenoidGrowth), how locally perturbed cells reorganize global defect topology (Cell Shape Dynamics), and how the expressing fraction shifts the sorting phase diagram (CellSorting). In all cases, the expressing fraction is a continuous experimental knob that sweeps through parameter space in a single experiment.</p>
+
+<p><strong>Timing control</strong> (DOX on/off) gives access not just to the amplitude but to the <em>timing</em> of a perturbation. In the SciML framework, timed perturbations generate non-equilibrium trajectories in the cell state landscape whose geometry encodes the direction and curvature of the energy landscape near specific morphogenetic checkpoints — providing richer constraints on E(cell state) than steady-state observations alone.</p>
+
+</body>
+</html>

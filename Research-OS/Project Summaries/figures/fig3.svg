@@ -1,0 +1,135 @@
+<svg viewBox="0 0 780 300" width="780" height="300" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Cell Shape Dynamics: 2D CCW rotation transitioning to 3D vortices/spirals, pre-patterning geometry effects, and apical-basal nuclear motion</title>
+  <defs>
+    <marker id="b-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="b-purple" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#6A1B9A"/>
+    </marker>
+    <marker id="b-red" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#B71C1C"/>
+    </marker>
+  </defs>
+
+  <!-- ── Left: 2D colony CCW rotation ── -->
+  <text x="90" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">2D Colony</text>
+  <!-- Colony boundary -->
+  <circle cx="90" cy="130" r="72" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="2"/>
+  <!-- Nuclei dots -->
+  <circle cx="90" cy="72" r="5" fill="#9575CD"/><circle cx="130" cy="88" r="4.5" fill="#9575CD"/>
+  <circle cx="148" cy="128" r="5" fill="#9575CD"/><circle cx="130" cy="168" r="4.5" fill="#9575CD"/>
+  <circle cx="90" cy="185" r="5" fill="#9575CD"/><circle cx="50" cy="168" r="4.5" fill="#9575CD"/>
+  <circle cx="32" cy="128" r="5" fill="#9575CD"/><circle cx="50" cy="88" r="4.5" fill="#9575CD"/>
+  <circle cx="90" cy="130" r="4" fill="#9575CD"/>
+  <circle cx="108" cy="112" r="4" fill="#9575CD"/><circle cx="72" cy="112" r="4" fill="#9575CD"/>
+  <circle cx="72" cy="148" r="4" fill="#9575CD"/><circle cx="108" cy="148" r="4" fill="#9575CD"/>
+
+  <!-- CCW rotation arrows (curved, at periphery) -->
+  <path d="M 148,104 A 55,55 0 0 0 155,152" fill="none" stroke="#B71C1C" stroke-width="2.5" marker-end="url(#b-red)"/>
+  <path d="M 90,58 A 55,55 0 0 0 40,104" fill="none" stroke="#B71C1C" stroke-width="2.5" marker-end="url(#b-red)"/>
+  <text x="90" y="240" text-anchor="middle" font-size="9.5" fill="#B71C1C" font-weight="bold">CCW rotation</text>
+  <text x="90" y="255" text-anchor="middle" font-size="9" fill="#555">chiral active stress</text>
+
+  <!-- ── Transition arrow ── -->
+  <text x="200" y="122" text-anchor="middle" font-size="10" fill="#555" font-style="italic">2D→3D</text>
+  <text x="200" y="137" text-anchor="middle" font-size="10" fill="#555" font-style="italic">closure</text>
+  <line x1="168" y1="130" x2="232" y2="130" stroke="#555" stroke-width="2" marker-end="url(#b-gray)"/>
+  <!-- Poincaré-Hopf note -->
+  <text x="200" y="158" text-anchor="middle" font-size="8" fill="#777">Poincaré–Hopf</text>
+  <text x="200" y="169" text-anchor="middle" font-size="8" fill="#777">→ +1 defects</text>
+
+  <!-- ── Middle: 3D sphere with vortices/spirals ── -->
+  <text x="340" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">3D Lumenoid Surface</text>
+  <!-- Sphere (outer ellipse) -->
+  <ellipse cx="340" cy="130" rx="78" ry="78" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+  <!-- Latitude lines -->
+  <ellipse cx="340" cy="130" rx="78" ry="20" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.5"/>
+  <ellipse cx="340" cy="105" rx="65" ry="16" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.4"/>
+  <ellipse cx="340" cy="155" rx="65" ry="16" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.4"/>
+  <!-- Longitude arc -->
+  <path d="M340,52 Q400,130 340,208" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.5"/>
+  <path d="M340,52 Q280,130 340,208" fill="none" stroke="#CE93D8" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Defect 1 (top) — vortex -->
+  <circle cx="340" cy="72" r="8" fill="#FF8A80" stroke="#B71C1C" stroke-width="1.5"/>
+  <text x="340" y="77" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="bold">+1</text>
+  <!-- Vortex arrows around defect 1 -->
+  <path d="M 322,66 A 14,14 0 1 1 322,79" fill="none" stroke="#B71C1C" stroke-width="1.8" marker-end="url(#b-red)"/>
+
+  <!-- Defect 2 (bottom) — spiral -->
+  <circle cx="340" cy="188" r="8" fill="#FF8A80" stroke="#B71C1C" stroke-width="1.5"/>
+  <text x="340" y="193" text-anchor="middle" font-size="9" fill="#B71C1C" font-weight="bold">+1</text>
+  <!-- Spiral arrows around defect 2 -->
+  <path d="M 322,184 A 14,14 0 1 1 322,197" fill="none" stroke="#B71C1C" stroke-width="1.8" marker-end="url(#b-red)"/>
+  <!-- INM source indicator -->
+  <line x1="340" y1="180" x2="340" y2="172" stroke="#1565C0" stroke-width="1.5" marker-end="url(#b-purple)"/>
+  <text x="356" y="172" font-size="8" fill="#1565C0">INM</text>
+  <text x="356" y="182" font-size="8" fill="#1565C0">source</text>
+
+  <!-- Flow lines on sphere surface -->
+  <path d="M295,100 Q315,115 300,135 Q285,155 295,175" fill="none" stroke="#6A1B9A" stroke-width="1.5" opacity="0.7"/>
+  <path d="M385,100 Q365,115 380,135 Q395,155 385,175" fill="none" stroke="#6A1B9A" stroke-width="1.5" opacity="0.7"/>
+
+  <text x="340" y="240" text-anchor="middle" font-size="9.5" fill="#B71C1C" font-weight="bold">vortices + spirals</text>
+  <text x="340" y="255" text-anchor="middle" font-size="9" fill="#555">active polar fluid on S²</text>
+
+  <!-- ── Right: Geometry effects ── -->
+  <line x1="428" y1="20" x2="428" y2="280" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="610" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Pre-patterning → 3D Topology</text>
+
+  <!-- Row 1: Disk → Sphere -->
+  <text x="500" y="38" text-anchor="middle" font-size="9" fill="#666">2D colony</text>
+  <text x="700" y="38" text-anchor="middle" font-size="9" fill="#666">3D morphology</text>
+
+  <!-- Disk -->
+  <circle cx="490" cy="72" r="28" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="490" y="76" text-anchor="middle" font-size="9" fill="#4A148C">disk</text>
+  <line x1="522" y1="72" x2="558" y2="72" stroke="#555" stroke-width="1.5" marker-end="url(#b-gray)"/>
+  <!-- Sphere -->
+  <ellipse cx="590" cy="72" rx="28" ry="28" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <ellipse cx="590" cy="72" rx="28" ry="7" fill="none" stroke="#CE93D8" stroke-width="0.8"/>
+  <text x="590" y="76" text-anchor="middle" font-size="9" fill="#4A148C">sphere</text>
+  <text x="640" y="70" text-anchor="start" font-size="9" fill="#333">2 defects</text>
+
+  <!-- Row 2: Stripe → Capped Cylinder -->
+  <rect x="462" y="120" width="56" height="26" rx="3" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="490" y="137" text-anchor="middle" font-size="9" fill="#4A148C">stripe</text>
+  <line x1="522" y1="133" x2="558" y2="133" stroke="#555" stroke-width="1.5" marker-end="url(#b-gray)"/>
+  <!-- Capped cylinder: cylindrical body + two domed hemispherical caps -->
+  <!-- Body fill -->
+  <rect x="562" y="120" width="56" height="28" fill="#F3E5F5" stroke="none"/>
+  <!-- Top dome (upper arc = spherical cap) -->
+  <path d="M 562,120 A 28,12 0 0 1 618,120" fill="#E0D0EF" stroke="#7B1FA2" stroke-width="1.5"/>
+  <!-- Bottom dome (lower arc = spherical cap) -->
+  <path d="M 618,148 A 28,12 0 0 1 562,148" fill="#E0D0EF" stroke="#7B1FA2" stroke-width="1.5"/>
+  <!-- Side edges -->
+  <line x1="562" y1="120" x2="562" y2="148" stroke="#7B1FA2" stroke-width="1.5"/>
+  <line x1="618" y1="120" x2="618" y2="148" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="590" y="137" text-anchor="middle" font-size="8.5" fill="#4A148C">capped cyl.</text>
+  <text x="640" y="131" text-anchor="start" font-size="9" fill="#333">2 defects</text>
+  <text x="640" y="143" text-anchor="start" font-size="8" fill="#555">(sphere topology)</text>
+
+  <!-- Row 3: Ring → Torus -->
+  <!-- Ring (annulus) -->
+  <circle cx="490" cy="218" r="28" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <circle cx="490" cy="218" r="12" fill="#fff" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="490" y="222" text-anchor="middle" font-size="9" fill="#4A148C">ring</text>
+  <line x1="522" y1="218" x2="558" y2="218" stroke="#555" stroke-width="1.5" marker-end="url(#b-gray)"/>
+  <!-- Torus (simplified as overlapping ellipses) -->
+  <ellipse cx="590" cy="218" rx="30" ry="14" fill="none" stroke="#7B1FA2" stroke-width="1.5"/>
+  <ellipse cx="590" cy="218" rx="30" ry="14" fill="#F3E5F5"/>
+  <ellipse cx="590" cy="218" rx="12" ry="6" fill="#fff" stroke="#7B1FA2" stroke-width="1.5"/>
+  <ellipse cx="590" cy="210" rx="24" ry="8" fill="none" stroke="#CE93D8" stroke-width="1"/>
+  <text x="590" y="222" text-anchor="middle" font-size="9" fill="#4A148C">torus</text>
+  <text x="640" y="215" text-anchor="start" font-size="9" fill="#333">0 defects</text>
+  <text x="640" y="227" text-anchor="start" font-size="8" fill="#555">(genus-1)</text>
+
+  <!-- Label column -->
+  <text x="450" y="195" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">Prior</text>
+  <text x="450" y="206" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">expts.</text>
+  <!-- bracket -->
+  <line x1="460" y1="115" x2="455" y2="115" stroke="#4A148C" stroke-width="1"/>
+  <line x1="455" y1="115" x2="455" y2="240" stroke="#4A148C" stroke-width="1"/>
+  <line x1="455" y1="240" x2="460" y2="240" stroke="#4A148C" stroke-width="1"/>
+</svg>

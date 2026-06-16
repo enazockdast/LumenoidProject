@@ -1,0 +1,110 @@
+<svg viewBox="0 0 780 240" width="780" height="240" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Shape Dynamics Langevin subproject and model resolution ladder</title>
+  <defs>
+    <marker id="c-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="c-purple" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#6A1B9A"/>
+    </marker>
+  </defs>
+
+  <!-- ── Left: cell with shape modes ── -->
+  <text x="110" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Shape Modes</text>
+
+  <!-- Base cell shape (slightly irregular ellipse approximated) -->
+  <ellipse cx="110" cy="120" rx="55" ry="38" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="2"/>
+  <!-- Mode indicators -->
+  <text x="110" y="115" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">q₁ elongation</text>
+  <text x="110" y="128" text-anchor="middle" font-size="9" fill="#4A148C">q₂ bending</text>
+  <text x="110" y="141" text-anchor="middle" font-size="9" fill="#7B1FA2">q₃… higher</text>
+  <!-- Nucleus inside -->
+  <ellipse cx="110" cy="120" rx="18" ry="13" fill="#CE93D8" stroke="#4A148C" stroke-width="1.5"/>
+  <text x="110" y="124" text-anchor="middle" font-size="8" fill="#fff">nucleus</text>
+  <!-- Mode arrows -->
+  <line x1="163" y1="110" x2="178" y2="104" stroke="#B71C1C" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <line x1="163" y1="130" x2="178" y2="136" stroke="#B71C1C" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <text x="148" y="90" text-anchor="middle" font-size="9" fill="#B71C1C">SH or PCA</text>
+  <text x="148" y="101" text-anchor="middle" font-size="9" fill="#B71C1C">decomposition</text>
+
+  <!-- Neighbor coupling arrows -->
+  <ellipse cx="57" cy="158" rx="32" ry="22" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="57" y="162" text-anchor="middle" font-size="8" fill="#1A237E">neighbor</text>
+  <line x1="77" y1="148" x2="93" y2="138" stroke="#3949AB" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#c-gray)"/>
+
+  <ellipse cx="163" cy="158" rx="32" ry="22" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="163" y="162" text-anchor="middle" font-size="8" fill="#1A237E">neighbor</text>
+  <line x1="143" y1="148" x2="127" y2="138" stroke="#3949AB" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#c-gray)"/>
+
+  <text x="110" y="207" text-anchor="middle" font-size="9.5" fill="#4A148C" font-weight="bold">Shape Dynamics</text>
+  <text x="110" y="220" text-anchor="middle" font-size="9" fill="#555">dqᵢ/dt = −∂E/∂qᵢ + η</text>
+  <text x="110" y="233" text-anchor="middle" font-size="8.5" fill="#777">E depends on cell + neighbors</text>
+
+  <!-- ── Middle: energy landscape for shape ── -->
+  <line x1="215" y1="20" x2="215" y2="235" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="380" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Shape Energy Landscape</text>
+
+  <!-- Axes -->
+  <line x1="240" y1="195" x2="540" y2="195" stroke="#555" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <line x1="240" y1="195" x2="240" y2="35" stroke="#555" stroke-width="1.5" marker-end="url(#c-gray)"/>
+  <text x="390" y="215" text-anchor="middle" font-size="10" fill="#555">shape mode space  q</text>
+  <text x="220" y="115" text-anchor="middle" font-size="10" fill="#555" transform="rotate(-90,220,115)">E(q)</text>
+
+  <!-- Energy curve with wells for different shape states -->
+  <!-- Smooth curve: flat → columnar → pseudostratified -->
+  <path d="M255,80 Q275,155 305,100 Q330,55 360,95 Q385,130 410,80 Q435,40 460,85 Q490,130 520,85"
+        fill="none" stroke="#7B1FA2" stroke-width="2.5"/>
+
+  <!-- Well 1: flat -->
+  <circle cx="305" cy="100" r="5" fill="#7B1FA2"/>
+  <text x="305" y="130" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">flat</text>
+  <text x="305" y="142" text-anchor="middle" font-size="8" fill="#666">2D colony</text>
+
+  <!-- Well 2: columnar -->
+  <circle cx="410" cy="80" r="5" fill="#7B1FA2"/>
+  <text x="410" y="60" text-anchor="middle" font-size="9" fill="#4A148C" font-weight="bold">columnar</text>
+  <text x="410" y="72" text-anchor="middle" font-size="8" fill="#666">transition</text>
+
+  <!-- Well 3: pseudostratified -->
+  <circle cx="490" cy="130" r="5" fill="#7B1FA2"/>
+  <text x="505" y="130" text-anchor="start" font-size="9" fill="#4A148C" font-weight="bold">pseudo-</text>
+  <text x="505" y="141" text-anchor="start" font-size="9" fill="#4A148C" font-weight="bold">stratified</text>
+  <text x="505" y="153" text-anchor="start" font-size="8" fill="#666">3D lumenoid</text>
+
+  <!-- Noise fluctuation -->
+  <path d="M305,100 Q312,88 320,94 Q328,100 336,93" fill="none" stroke="#B71C1C" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <text x="321" y="83" text-anchor="middle" font-size="8" fill="#B71C1C">η(t)</text>
+
+  <!-- Perturbation arrow (shifts landscape) -->
+  <line x1="360" y1="55" x2="385" y2="55" stroke="#1565C0" stroke-width="1.5" marker-end="url(#c-gray)" stroke-dasharray="4,3"/>
+  <text x="372" y="46" text-anchor="middle" font-size="8" fill="#1565C0">rapamycin</text>
+
+  <!-- ── Right: Model resolution ladder ── -->
+  <line x1="548" y1="20" x2="548" y2="235" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="665" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#4A148C">Model Ladder</text>
+
+  <!-- Four model levels stacked vertically -->
+  <rect x="560" y="28" width="200" height="32" rx="5" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="1.5"/>
+  <text x="660" y="43" text-anchor="middle" font-size="10" font-weight="bold" fill="#4A148C">Active Polar Fluid</text>
+  <text x="660" y="56" text-anchor="middle" font-size="8.5" fill="#555">continuum flow topology</text>
+
+  <rect x="560" y="73" width="200" height="32" rx="5" fill="#EDE7F6" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="660" y="88" text-anchor="middle" font-size="10" font-weight="bold" fill="#4A148C">Voronoi / Vertex</text>
+  <text x="660" y="101" text-anchor="middle" font-size="8.5" fill="#555">cell-resolved, perturbations</text>
+
+  <rect x="560" y="118" width="200" height="32" rx="5" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="660" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2a — Inference</text>
+  <text x="660" y="146" text-anchor="middle" font-size="8.5" fill="#555">ζ, κ, K, γv₀ from data</text>
+
+  <rect x="560" y="163" width="200" height="32" rx="5" fill="#E8EAF6" stroke="#3949AB" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="660" y="178" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A237E">Phase 2b — Discovery</text>
+  <text x="660" y="191" text-anchor="middle" font-size="8.5" fill="#888">which fields govern dynamics?</text>
+  <text x="660" y="203" text-anchor="middle" font-size="8" fill="#888" font-style="italic">(label-free pipeline)</text>
+
+  <!-- Arrows between model levels -->
+  <line x1="660" y1="60" x2="660" y2="73" stroke="#6A1B9A" stroke-width="1.2" marker-end="url(#c-purple)"/>
+  <line x1="660" y1="105" x2="660" y2="118" stroke="#6A1B9A" stroke-width="1.2" marker-end="url(#c-purple)"/>
+  <line x1="660" y1="150" x2="660" y2="163" stroke="#3949AB" stroke-width="1.2" marker-end="url(#c-gray)"/>
+  <text x="695" y="68" font-size="8" fill="#777">more</text>
+  <text x="695" y="78" font-size="8" fill="#777">resolved</text>
+</svg>

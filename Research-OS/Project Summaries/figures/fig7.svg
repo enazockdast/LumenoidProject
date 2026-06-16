@@ -1,0 +1,110 @@
+<svg viewBox="0 0 780 340" width="780" height="340" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" role="img">
+  <title>Synthetic modules: four circuit classes and their connections to the three projects, with mosaic and timing control highlighted</title>
+  <defs>
+    <marker id="f-gray" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#555"/>
+    </marker>
+    <marker id="f-dark" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#37474F"/>
+    </marker>
+  </defs>
+
+  <!-- ── Column headers ── -->
+  <text x="160" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#37474F">Module Class</text>
+  <text x="430" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#37474F">Key Capability</text>
+  <text x="670" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#37474F">Project Connection</text>
+  <line x1="10" y1="22" x2="770" y2="22" stroke="#bbb" stroke-width="1"/>
+
+  <!-- ═══ ROW 1: Fate Control ═══ -->
+  <!-- Module box -->
+  <rect x="10" y="30" width="295" height="60" rx="6" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="30" y="52" font-size="12" font-weight="bold" fill="#1B5E20">① Fate Control</text>
+  <text x="30" y="68" font-size="9.5" fill="#333">Drive cell identity, polarization state,</text>
+  <text x="30" y="81" font-size="9.5" fill="#333">or differentiation on demand</text>
+
+  <!-- Capability -->
+  <rect x="318" y="30" width="225" height="60" rx="6" fill="#F1F8E9" stroke="#558B2F" stroke-width="1.2"/>
+  <text x="330" y="50" font-size="9.5" fill="#333">• Set mosaic cell-type composition</text>
+  <text x="330" y="63" font-size="9.5" fill="#333">• Bias apical vs. basal polarity</text>
+  <text x="330" y="76" font-size="9.5" fill="#333">• Gate 2D→3D transition timing</text>
+
+  <!-- Project tags -->
+  <rect x="556" y="35" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="50" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+  <rect x="556" y="63" width="110" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="611" y="78" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting</text>
+  <rect x="672" y="35" width="100" height="22" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="722" y="50" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0D47A1">LumenoidGrowth</text>
+
+  <!-- ═══ ROW 2: Cell-Cell Communication ═══ -->
+  <rect x="10" y="100" width="295" height="60" rx="6" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="30" y="122" font-size="12" font-weight="bold" fill="#0D47A1">② Cell-Cell Communication</text>
+  <text x="30" y="138" font-size="9.5" fill="#333">Synthetic lateral inhibition, sender /</text>
+  <text x="30" y="151" font-size="9.5" fill="#333">receiver, juxtacrine feedback</text>
+
+  <rect x="318" y="100" width="225" height="60" rx="6" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.2"/>
+  <text x="330" y="120" font-size="9.5" fill="#333">• Close signaling-mechanics loop</text>
+  <text x="330" y="133" font-size="9.5" fill="#333">• Sender fraction = tunable knob</text>
+  <text x="330" y="146" font-size="9.5" fill="#333">• Salt-and-pepper pattern access</text>
+
+  <rect x="556" y="105" width="110" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="611" y="120" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting ★</text>
+  <rect x="556" y="133" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="148" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+
+  <!-- ═══ ROW 3: Adhesion / Contractility ═══ -->
+  <rect x="10" y="170" width="295" height="60" rx="6" fill="#FBE9E7" stroke="#BF360C" stroke-width="2"/>
+  <text x="30" y="192" font-size="12" font-weight="bold" fill="#8D1F00">③ Adhesion / Contractility</text>
+  <text x="30" y="208" font-size="9.5" fill="#333">Inducible E-cad, N-cad, ROCK1,</text>
+  <text x="30" y="221" font-size="9.5" fill="#333">MYH9/10 — orthogonal inducers</text>
+
+  <rect x="318" y="170" width="225" height="60" rx="6" fill="#FFF3E0" stroke="#E65100" stroke-width="1.2"/>
+  <text x="330" y="190" font-size="9.5" fill="#333">• True independent adhesion vs.</text>
+  <text x="330" y="203" font-size="9.5" fill="#333">  contractility titration</text>
+  <text x="330" y="216" font-size="9.5" fill="#333">• Mosaic mechanical heterogeneity</text>
+
+  <rect x="556" y="175" width="110" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="611" y="190" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting ★</text>
+  <rect x="556" y="203" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="218" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+  <rect x="672" y="175" width="100" height="22" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="722" y="190" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0D47A1">LumenoidGrowth</text>
+
+  <!-- ═══ ROW 4: Mechano-Biological ═══ -->
+  <rect x="10" y="240" width="295" height="60" rx="6" fill="#FFF8E1" stroke="#F57F17" stroke-width="2"/>
+  <text x="30" y="262" font-size="12" font-weight="bold" fill="#E65100">④ Mechano-Biological Circuits</text>
+  <text x="30" y="278" font-size="9.5" fill="#333">Output regulated by tension, pressure,</text>
+  <text x="30" y="291" font-size="9.5" fill="#333">curvature, or substrate stiffness</text>
+
+  <rect x="318" y="240" width="225" height="60" rx="6" fill="#FFFDE7" stroke="#F9A825" stroke-width="1.2"/>
+  <text x="330" y="260" font-size="9.5" fill="#333">• Tissue self-reports mechanical state</text>
+  <text x="330" y="273" font-size="9.5" fill="#333">• Test mechano-biological feedback</text>
+  <text x="330" y="286" font-size="9.5" fill="#333">• Stabilize / destabilize morphogenesis</text>
+
+  <rect x="556" y="245" width="100" height="22" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="606" y="260" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0D47A1">LumenoidGrowth</text>
+  <rect x="556" y="273" width="110" height="22" rx="4" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="611" y="288" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#4A148C">Cell Shape Dyn.</text>
+  <rect x="672" y="245" width="100" height="22" rx="4" fill="#FBE9E7" stroke="#BF360C" stroke-width="1.5"/>
+  <text x="722" y="260" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#8D1F00">CellSorting</text>
+
+  <!-- ═══ Bottom strip: Mosaic + Timing ═══ -->
+  <rect x="10" y="310" width="760" height="26" rx="5" fill="#ECEFF1" stroke="#607D8B" stroke-width="1.5"/>
+  <text x="160" y="327" text-anchor="middle" font-size="10" font-weight="bold" fill="#37474F">Mosaic expression</text>
+  <text x="160" y="327" font-size="0" fill="none"/>
+  <!-- mosaic icon: two cell colors -->
+  <rect x="20" y="315" width="10" height="10" rx="2" fill="#A5D6A7"/>
+  <rect x="32" y="315" width="10" height="10" rx="2" fill="#EF9A9A"/>
+  <rect x="44" y="315" width="10" height="10" rx="2" fill="#A5D6A7"/>
+  <rect x="56" y="315" width="10" height="10" rx="2" fill="#EF9A9A"/>
+  <rect x="68" y="315" width="10" height="10" rx="2" fill="#EF9A9A"/>
+  <text x="84" y="327" font-size="9.5" fill="#37474F">Expressing fraction = direct knob on local-to-global coupling in all models</text>
+  <text x="405" y="327" font-size="10" font-weight="bold" fill="#37474F"> | </text>
+  <!-- timing icon -->
+  <text x="415" y="327" font-size="9.5" fill="#37474F">⏱ </text>
+  <text x="428" y="327" font-size="10" font-weight="bold" fill="#37474F">Timing control: </text>
+  <text x="515" y="327" font-size="9.5" fill="#37474F">DOX on/off maps non-equilibrium trajectories in the cell state landscape</text>
+
+  <!-- ★ legend -->
+  <text x="680" y="308" font-size="8.5" fill="#8D1F00">★ = most developed</text>
+</svg>

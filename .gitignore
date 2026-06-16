@@ -1,3 +1,6 @@
 .DS_Store
 .venv/
 Research-OS/.venv/
+*.aux
+*.log
+*.out
