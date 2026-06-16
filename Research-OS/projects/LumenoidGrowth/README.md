@@ -52,3 +52,15 @@ Development of a minimal continuum model incorporating:
 
 Develop predictive and interpretable models linking cellular growth, tissue mechanics, and transport processes in lumenized multicellular systems.
 
+## Foundational References
+
+`★` = review / synthesis.
+
+- ★ Echeverría-Alar, S. *et al.* *Lumens as active balloons: a biological physics review.* arXiv:2605.01649 (2026). — `Rappel_LumenoidReview.pdf`
+- ★ Torres-Sánchez, A., Kerr Winter, M. & Salbreux, G. *Tissue hydraulics: physics of lumen formation and interaction.* Cells & Development 168, 203724 (2021). — `Stage2_LumenHydraulics.pdf`
+- Vasquez, C. G., Vachharajani, V. T., Garzon-Coral, C. & Dunn, A. R. *Physical basis for the determination of lumen shape in a simple epithelium.* Nature Communications 12, 5608 (2021). — `DunnVasquez.pdf`
+- Lee, B. H., Petzold, H., Grapin-Botton, A. *et al.* *Permeability-driven pressure and cell proliferation control lumen morphogenesis in pancreatic organoids.* Nature Cell Biology (2025). — `PermeabilityDrivePressure.pdf`
+- Primary hiPSC lumenoid study. bioRxiv (2025). — `LumenoidMaha2025_BiorXiv.pdf` *(authors/title to be confirmed)*
+
+Full corpus: `Literature/` (see `Literature/outputs/paper_to_theme_matrix.xlsx`).
+
